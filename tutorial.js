@@ -131,6 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			document.getElementById('A_lineup_total_physical').textContent = '<span class="physical">40</span>';
 			document.getElementById('A_lineup_total_total').textContent = '<span class="total">40</span>';
 			
+			window.step = 2;
 			
 		} else if (window.step == 15) {
 			document.getElementById('A_lineup_slot2_merc').textContent = 'Fighter Lvl 1';
@@ -138,15 +139,27 @@ document.addEventListener('DOMContentLoaded', function() {
 			document.getElementById('A_lineup_slot2_total').textContent = '<span class="total">40</span>';
 			document.getElementById('A_lineup_total_physical').textContent = '<span class="physical">90</span>';
 			document.getElementById('A_lineup_total_total').textContent = '<span class="total">90</span>';
+
+			window.step = 16;
 		} else {
 			followguide();
 		};
-		// check step 1, 15
-		// update interface
-			// update all treasury
-			// update lineup
-			// disable all hiring buttons for now
-			// update dungeon (all missing power, light up the right dungeons)
+	}
+
+	window.A_buysword1 = function() {
+		if (window.step == 2) {
+			document.getElementById('raid_GuildA_spareequipment_table').style.display = 'block';
+			window.step = 3;
+		} else {
+			followguide();
+		};
+	};
+
+	window.A_equipsword1 = function() {
+		if (window.step == 3) {
+			document.getElementById('raid_GuildA_spareequipment_table').style.display = 'none';
+			window.step = 4
+		}
 	}
 
 
