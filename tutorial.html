@@ -1198,7 +1198,7 @@
 							</select>
 						</td>
 						<td style="border:none; background-color: transparent;">
-							<button onclick="A_equip_sword1()">Equip</button>
+							<button onclick="A_equipsword1()">Equip</button>
 						</td>
 					</tbody>
 				</table>
@@ -2152,6 +2152,112 @@
 				<p>* Chance of looting the treasure if only your guild is raiding this dungeon. Chances will be smaller when multiple guilds raid the same dungeon.</p>
 			</div>
 			<div id='raidchoices' style="margin-top:20px;">
+				<div>
+					<label for="raidchoice_GuildA_dropdown">
+						"This round "
+						<span class="GuildA">Guild A</span>
+						" will raid Dungeon"
+					</label>
+					<select id=""raidchoice_GuildA_dropdown">
+						<option value="None">----Choose----</option>
+						<optgroup label=""Era 1">
+							<option value="1A" id="raidchoice_A_1A">
+								1A
+							</option>
+							<option value="1B" id="raidchoice_A_1B">
+								1B
+							</option>
+							<option value="1C" id="raidchoice_A_1C">
+								1C
+							</option>
+							<option value="1D" id="raidchoice_A_1D">
+								1D
+							</option>
+							<option value="1E" id="raidchoice_A_1E">
+								1E
+							</option>
+							<option value="1F" id="raidchoice_A_1F">
+								1F
+							</option>
+						</optgroup>
+						<optgroup style="display: none;" label="Era 2">
+							<option value="1A" id="raidchoice_A_2A">
+								2A
+							</option>
+							<option value="1B" id="raidchoice_A_2B">
+								2B
+							</option>
+							<option value="1C" id="raidchoice_A_2C">
+								2C
+							</option>
+							<option value="1D" id="raidchoice_A_2D">
+								2D
+							</option>
+							<option value="1E" id="raidchoice_A_2E">
+								2E
+							</option>
+							<option value="1F" id="raidchoice_A_2F">
+								2F
+							</option>
+							<option value="1F" id="raidchoice_A_2G">
+								2G
+							</option>
+						</optgroup>
+					</select>
+				</div>
+				<div id="E_raidchoice" style="display: none;">
+					<label for="raidchoice_GuildA_dropdown">
+						"This round "
+						<span class="GuildE">Guild E</span>
+						" will raid Dungeon"
+					</label>
+					<select id=""raidchoice_GuildE_dropdown">
+						<option value="None">----Choose----</option>
+						<optgroup label=""Era 1">
+							<option value="1A" id="raidchoice_E_1A">
+								1A
+							</option>
+							<option value="1B" id="raidchoice_E_1B">
+								1B
+							</option>
+							<option value="1C" id="raidchoice_E_1C">
+								1C
+							</option>
+							<option value="1D" id="raidchoice_E_1D">
+								1D
+							</option>
+							<option value="1E" id="raidchoice_E_1E">
+								1E
+							</option>
+							<option value="1F" id="raidchoice_E_1F">
+								1F
+							</option>
+						</optgroup>
+						<optgroup label=""Era 2">
+							<option value="1A" id="raidchoice_E_2A">
+								2A
+							</option>
+							<option value="1B" id="raidchoice_E_2B">
+								2B
+							</option>
+							<option value="1C" id="raidchoice_E_2C">
+								2C
+							</option>
+							<option value="1D" id="raidchoice_E_2D">
+								2D
+							</option>
+							<option value="1E" id="raidchoice_E_2E">
+								2E
+							</option>
+							<option value="1F" id="raidchoice_E_2F">
+								2F
+							</option>
+							<option value="1F" id="raidchoice_E_2G">
+								2G
+							</option>
+						</optgroup>
+					</select>					
+				</div>
 			</div>
 			
 			<button id="raidinputbutton" onclick="submitRaidChoice()" class="endButton">Submit</button>
