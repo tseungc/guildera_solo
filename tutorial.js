@@ -162,6 +162,12 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	}
 
+	window.raidsubmit = function() {
+		if (window.step == 4) {
+			updatephase('D');
+		}
+	}
+
 
 	window.followguide = function() {
 		alert('Please follow the guide.');
