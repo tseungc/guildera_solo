@@ -1,0 +1,2483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GuildEra - Solo Tutorial</title>
+    <!-- Include Socket.IO's JavaScript client -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <!-- Link to your external JavaScript file -->
+    <script src="/static/tutorial.js" defer></script>
+	<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <!-- Google material icons -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=help" />
+	<style>
+		.material-symbols-outlined {
+			margin-left: 2px; /* Space between text and icon */
+			font-size: 16px; /* Adjust this size to match your text */
+			cursor: help;
+		}
+		body {
+			display: flex;
+			flex-direction: column;
+			padding: 10px;
+		}
+		#gameInfo {
+			position: fixed; /* Position it relative to the viewport */
+			right: 10px; /* Place it 10px from the right edge of the viewport */
+			top: 10px; /* Place it 10px from the top edge of the viewport */
+			width: 300px;
+			background-color: lightgray;
+			padding: 10px;
+			border-radius: 5px;
+		}
+		.hover {
+			cursor: help;
+		}
+		.tooltip {
+			position: absolute;
+			background-color: #333;
+			color: #fff;
+			padding: 5px;
+			border-radius: 4px;
+			z-index: 1000;
+			white-space: nowrap;
+		}
+		.viewpopup {
+			position: fixed;
+			left: 16px;
+			top: 20px;
+			border: 2px solid black;
+			padding: 10px;
+			border-radius: 5px;
+			background-color: lightgray;
+			padding-top: 5px;
+		}
+		.GuildA{
+			background-color: #FFD6D6;
+			border-radius: 5px;
+		}
+		.GuildB{
+			background-color: #FFE6D6;
+			border-radius: 5px;
+		}
+		.GuildC{
+			background-color: #FFFFD6;
+			border-radius: 5px;
+		}
+		.GuildD{
+			background-color: #D6FFD6;
+			border-radius: 5px;
+		}
+		.GuildE{
+			background-color: #D6F0FF;
+			border-radius: 5px;
+		}
+		.GuildF{
+			background-color: #D6D6FF;
+			border-radius: 5px;
+		}
+		.GuildG{
+			background-color: #ECD6FF;
+			border-radius: 5px;
+		}
+		.GuildAButton{
+			background-color: #FFD6D6;
+		}
+		.GuildBButton{
+			background-color: #FFE6D6;
+		}
+		.GuildCButton{
+			background-color: #FFFFD6;
+		}
+		.GuildDButton{
+			background-color: #D6FFD6;
+		}
+		.GuildEButton{
+			background-color: #D6F0FF;
+		}
+		.GuildFButton{
+			background-color: #D6D6FF;
+		}
+		.GuildGButton{
+			background-color: #ECD6FF;
+		}
+
+		#raidlogTable td:nth-child(1),
+		#raidlogTable td:nth-child(2) {
+			width: 430px;
+		}
+		
+
+		#raidresultsTable td:nth-child(1),
+		#raidresultsTable td:nth-child(2) {
+			width: 70px;
+		}
+
+		#raidresultsTable td:nth-child(3),
+		#raidresultsTable td:nth-child(4),
+		#raidresultsTable td:nth-child(5),
+		#raidresultsTable td:nth-child(6) {
+			width: 110px;
+		}
+
+		#raidresultsTable td:nth-child(7),
+		#raidresultsTable td:nth-child(8) {
+			width: 70px;
+		}
+
+		#raidresultsTable td:nth-child(9) {
+			width: 140px;
+		}
+
+		#buysellTable th:nth-child(2), #buysellTable td:nth-child(2), 
+		#buysellTable th:nth-child(3), #buysellTable td:nth-child(3), 
+		#buysellTable th:nth-child(4), #buysellTable td:nth-child(4), 
+		#buysellTable th:nth-child(9), #buysellTable td:nth-child(9) {
+			width: 100px;
+		} 
+		#buysellTable th:nth-child(5), #buysellTable td:nth-child(5), 
+		#buysellTable th:nth-child(6), #buysellTable td:nth-child(6), 
+		#buysellTable th:nth-child(7), #buysellTable td:nth-child(7), 
+		#buysellTable th:nth-child(8), #buysellTable td:nth-child(8) {
+			width: 60px;
+		} 
+		#buysellTable th:nth-child(11), #buysellTable td:nth-child(11),
+		#buysellTable th:nth-child(12), #buysellTable td:nth-child(12) {
+			width: 30px;
+		} 
+		#buysellTable th:nth-child(1), #buysellTable td:nth-child(1) {
+			width: 70px;
+		} 
+		#buysellTable th:nth-child(10), #buysellTable td:nth-child(10) {
+			width: 70px;
+		} 
+
+		#view_stock_table th:nth-child(2), 
+		#view_stock_table th:nth-child(3), 
+		#view_stock_table th:nth-child(4),
+		#view_stock_table th:nth-child(9) {
+			width: 100px;
+		} 
+		#view_stock_table th:nth-child(5), 
+		#view_stock_table th:nth-child(6), 
+		#view_stock_table th:nth-child(7), 
+		#view_stock_table th:nth-child(8) {
+			width: 60px;
+		} 
+		#view_stock_table th:nth-child(11),
+		#view_stock_table th:nth-child(12) {
+			width: 30px;
+		} 
+		#view_stock_table th:nth-child(1) {
+			width: 70px;
+		} 
+		#view_stock_table th:nth-child(10) {
+			width: 70px;
+		} 		
+
+
+		#navTable th:nth-child(1), #navTable td:nth-child(1) {
+			width: 60px;
+		} 
+
+		#stockphaseresultsTable th:nth-child(1), #stockphaseresultsTable td:nth-child(1),
+		#stockphaseresultsTable th:nth-child(2), #stockphaseresultsTable td:nth-child(2) {
+			width: 75px;
+		}		
+		#stockphaseresultsTable th:nth-child(3), #stockphaseresultsTable td:nth-child(3),
+		#stockphaseresultsTable th:nth-child(4), #stockphaseresultsTable td:nth-child(4) {
+			width: 100px;
+		}		
+		#stockphaseresultsTable th:nth-child(5), #stockphaseresultsTable td:nth-child(5),
+		#stockphaseresultsTable th:nth-child(6), #stockphaseresultsTable td:nth-child(6),
+		#stockphaseresultsTable th:nth-child(7), #stockphaseresultsTable td:nth-child(7),
+		#stockphaseresultsTable th:nth-child(8), #stockphaseresultsTable td:nth-child(8) {
+			width: 80px;
+		}		
+		#stockphaseresultsTable th:nth-child(10), #stockphaseresultsTable td:nth-child(10) {
+			width: 90px;
+		}
+		#infostocktable th:nth-child(2), #infostocktable td:nth-child(2), 
+		#infostocktable th:nth-child(3), #infostocktable td:nth-child(3), 
+		#infostocktable th:nth-child(4), #infostocktable td:nth-child(4), 
+		#infostocktable th:nth-child(5), #infostocktable td:nth-child(5) {
+			width: 60px;
+		} 
+
+		#divTable th:nth-child(4), #divTable td:nth-child(4), 
+		#divTable th:nth-child(5), #divTable td:nth-child(5), 
+		#divTable th:nth-child(6), #divTable td:nth-child(6), 
+		#divTable th:nth-child(7), #divTable td:nth-child(7) {
+			width: 60px;
+		} 
+		#divresultsTable th:nth-child(4), #divresultsTable td:nth-child(4), 
+		#divresultsTable th:nth-child(5), #divresultsTable td:nth-child(5), 
+		#divresultsTable th:nth-child(6), #divresultsTable td:nth-child(6), 
+		#divresultsTable th:nth-child(7), #divresultsTable td:nth-child(7) {
+			width: 60px;
+		} 
+
+		table[id^="raid_Guild"][id$="_equipmentotherguild_table"] td.slider-cell{
+			width: 250px;
+			overflow:hidden;
+		}
+
+		table[id^="raid_Guild"][id$="_spareequipment_table"] th:nth-child(2), table[id^="raid_Guild"][id$="_spareequipment_table"] td:nth-child(2) {
+			width: 400px;
+		}
+
+		table[id^="raid_Guild"][id$="_mercshop_table"] th:nth-child(1), table[id^="raid_Guild"][id$="_mercshop_table"] td:nth-child(1) {
+			width: 110px;
+		}
+
+		table[id^="raid_Guild"][id$="_mercshop_table"] th:nth-child(2), table[id^="raid_Guild"][id$="_mercshop_table"] td:nth-child(2),
+		table[id^="raid_Guild"][id$="_mercshop_table"] th:nth-child(3), table[id^="raid_Guild"][id$="_mercshop_table"] td:nth-child(3),
+		table[id^="raid_Guild"][id$="_mercshop_table"] th:nth-child(4), table[id^="raid_Guild"][id$="_mercshop_table"] td:nth-child(4) {
+			width: 60px;
+		}
+
+		table[id^="raid_Guild"][id$="_mercshop_table"] th:nth-child(5), table[id^="raid_Guild"][id$="_mercshop_table"] td:nth-child(5) {
+			width: 400px;
+		}
+		table[id^="raid_Guild"][id$="_mercshop_table"] th:nth-child(6), table[id^="raid_Guild"][id$="_mercshop_table"] td:nth-child(6),
+		table[id^="raid_Guild"][id$="_mercshop_table"] th:nth-child(7), table[id^="raid_Guild"][id$="_mercshop_table"] td:nth-child(7) {
+			width: 75px;
+		}
+
+		table[id^="raid_Guild"][id$="_equipmentshop_table"] th:nth-child(1), table[id^="raid_Guild"][id$="_equipmentshop_table"] td:nth-child(1) {
+			width: 110px;
+		}
+
+		table[id^="raid_Guild"][id$="_equipmentshop_table"] th:nth-child(2), table[id^="raid_Guild"][id$="_equipmentshop_table"] td:nth-child(2),
+		table[id^="raid_Guild"][id$="_equipmentshop_table"] th:nth-child(3), table[id^="raid_Guild"][id$="_equipmentshop_table"] td:nth-child(3),
+		table[id^="raid_Guild"][id$="_equipmentshop_table"] th:nth-child(4), table[id^="raid_Guild"][id$="_equipmentshop_table"] td:nth-child(4) {
+			width: 60px;
+		}
+		table[id^="raid_Guild"][id$="_equipmentshop_table"] th:nth-child(5), table[id^="raid_Guild"][id$="_equipmentshop_table"] td:nth-child(5) {
+			width: 400px;
+		}
+		table[id^="raid_Guild"][id$="_equipmentshop_table"] th:nth-child(6), table[id^="raid_Guild"][id$="_equipmentshop_table"] td:nth-child(6),
+		table[id^="raid_Guild"][id$="_equipmentshop_table"] th:nth-child(7), table[id^="raid_Guild"][id$="_equipmentshop_table"] td:nth-child(7) {
+			width: 75px;
+		}
+
+		table[id^="raid_Guild"][id$="_lineup_table"] th:nth-child(1), table[id^="raid_Guild"][id$="_lineup_table"] td:nth-child(1) {
+			width: 60px;
+		}
+
+		table[id^="raid_Guild"][id$="_lineup_table"] th:nth-child(3) {
+			width: 200px;
+		}
+
+		table[id^="raid_Guild"][id$="_lineup_table"] th:nth-child(2),
+		table[id^="raid_Guild"][id$="_lineup_table"] th:nth-child(4),
+		table[id^="raid_Guild"][id$="_lineup_table"] th:nth-child(5),
+		table[id^="raid_Guild"][id$="_lineup_table"] th:nth-child(6),
+		table[id^="raid_Guild"][id$="_lineup_table"] th:nth-child(7) {
+			width: 110px;
+		}
+
+		table[id^="raid_Guild"][id$="_ability_table"] th:nth-child(1),
+		table[id^="raid_Guild"][id$="_ability_table"] th:nth-child(4) {
+			width: 40px;
+		}
+		table[id^="raid_Guild"][id$="_ability_table"] th:nth-child(2) {
+			width: 100px;
+		}
+		table[id^="raid_Guild"][id$="_ability_table"] th:nth-child(3) {
+			width: 20px;
+		}
+		table[id^="raid_Guild"][id$="_ability_table"] th:nth-child(6) {
+			width: 55px;
+		}
+		table[id^="raid_Guild"][id$="_fact_abilitytable"] th:nth-child(1) {
+			width: 100px;
+		}
+		table[id^="raid_Guild"][id$="_fact_abilitytable"] th:nth-child(2) {
+			width: 20px;
+		}
+		table[id^="raid_Guild"][id$="_fact_abilitytable"] th:nth-child(3) {
+			width: 40px;
+		}
+
+		#view_merc_table th:nth-child(1), #view_merc_table td:nth-child(1) {
+			width: 110px;
+		} 
+
+		#view_merc_table th:nth-child(2), #view_merc_table td:nth-child(2),
+		#view_merc_table th:nth-child(3), #view_merc_table td:nth-child(3),
+		#view_merc_table th:nth-child(4), #view_merc_table td:nth-child(4) {
+			width: 60px;
+		} 
+		
+		#view_merc_table th:nth-child(5), #view_merc_table td:nth-child(5) {
+			width: 400px;
+		}
+		
+		#view_merc_table th:nth-child(6), #view_merc_table td:nth-child(6) {
+			width: 75px;
+		} 
+		
+
+		#view_equipment_table th:nth-child(1), #view_equipment_table td:nth-child(1) {
+			width: 110px;
+		} 
+
+		#view_equipment_table th:nth-child(2), #view_equipment_table td:nth-child(2),
+		#view_equipment_table th:nth-child(3), #view_equipment_table td:nth-child(3),
+		#view_equipment_table th:nth-child(4), #view_equipment_table td:nth-child(4) {
+			width: 60px;
+		} 
+		
+		#view_equipment_table th:nth-child(5), #view_equipment_table td:nth-child(5) {
+			width: 400px;
+		}
+		
+		#view_equipment_table th:nth-child(6), #view_equipment_table td:nth-child(6) {
+			width: 75px;
+		} 
+		
+		#view_dungeon_table th:nth-child(2), #view_dungeon_table td:nth-child(2), 
+		#view_dungeon_table th:nth-child(3), #view_dungeon_table td:nth-child(3), 
+		#view_dungeon_table th:nth-child(4), #view_dungeon_table td:nth-child(4), 
+		#view_dungeon_table th:nth-child(5), #view_dungeon_table td:nth-child(5) {
+			width: 90px;
+		}
+
+		#view_dungeon_table th:nth-child(8), #view_dungeon_table th:nth-child(8) {
+			width: 145px;
+		}
+
+		#view_dungeon_table th:nth-child(7), #view_dungeon_table th:nth-child(7) {
+			width: 145px;
+		}
+		
+		#view_dungeon_table th:nth-child(6), #view_dungeon_table th:nth-child(6) {
+			width: 120px;
+		}
+		
+		#view_dungeon_table th:nth-child(1), #view_dungeon_table th:nth-child(1) {
+			width: 60px;
+		}
+
+		table[id^="raid_Guild"][id$="_dungeon_table"] th:nth-child(2), table[id^="raid_Guild"][id$="_dungeon_table"] td:nth-child(2),
+		table[id^="raid_Guild"][id$="_dungeon_table"] th:nth-child(3), table[id^="raid_Guild"][id$="_dungeon_table"] td:nth-child(3),
+		table[id^="raid_Guild"][id$="_dungeon_table"] th:nth-child(4), table[id^="raid_Guild"][id$="_dungeon_table"] td:nth-child(4),
+		table[id^="raid_Guild"][id$="_dungeon_table"] th:nth-child(5), table[id^="raid_Guild"][id$="_dungeon_table"] td:nth-child(5) {
+			width: 90px;
+		}
+		table[id^="raid_Guild"][id$="_dungeon_table"] th:nth-child(8), table[id^="raid_Guild"][id$="_dungeon_table"] td:nth-child(8) {
+			width: 145px;
+		}			
+		table[id^="raid_Guild"][id$="_dungeon_table"] th:nth-child(7), table[id^="raid_Guild"][id$="_dungeon_table"] td:nth-child(7) {
+			width: 145px;
+		}			
+		table[id^="raid_Guild"][id$="_dungeon_table"] th:nth-child(6), table[id^="raid_Guild"][id$="_dungeon_table"] td:nth-child(6) {
+			width: 120px;
+		}			
+		table[id^="raid_Guild"][id$="_dungeon_table"] th:nth-child(1), table[id^="raid_Guild"][id$="_dungeon_table"] td:nth-child(1) {
+			width: 60px;
+		}			
+		#mainContent {
+			margin-right: 350px; /* Add right margin to prevent #mainContent from going under #gameInfo */
+		}
+		.notchosenLocked, .GuildELocked, .GuildFLocked, .GuildGLocked, .era2Locked, .era3Locked, .notguildmasterLocked, .notreasure {
+			background-color: #DDDDDD !important;
+			color: #999999;
+		}
+		.notreasure span, .notchosenLocked span, .GuildELocked span, .GuildFLocked span, .GuildGLocked span, .era2Locked span, .era3Locked span, .notguildmasterLocked span {
+			color: #999999 !important;
+			filter: grayscale(100%);
+		}
+		.nothighlight {
+			color: #CCCCCC !important;
+			filter: grayscale(100%);
+		}
+		.highlight {
+			color: rgb(0, 197, 183);
+		}
+		.stockhide{
+			background-color: #EEEEEE;
+		}
+		.notguildmasterHide {
+			display: none;
+		}
+		td, th {
+			text-align: center;
+			border: 1px solid black;
+			background-color: white;
+		}
+		table {
+			border-collapse: collapse;
+		}
+		.endButton {
+			margin-top: 20px;
+		}
+		.actionDisabled, .alreadyshowing, .era2Disabled, .era3Disabled, .notguildmasterDisabled, .divchoicesDisabled, .buysellDisabled, .cannotrecruit, .cannotbuy {
+			opacity: 0.5;
+			pointer-events: none;
+		}
+		.up {
+			color: green;
+		}
+		.down {
+			color: red;
+		}
+		.magic {
+			color: blue;
+		}
+		.ranged {
+			color: green;
+		}
+		.physical {
+			color: red;
+		}
+		.total {
+			color: purple;
+		}
+		.modified {
+			color: orange;
+		}
+		.missing {
+			color: #CCCCCC;
+		}
+		.used {
+			color: #999999;
+		}
+		span {
+			font-weight: bold;
+		}
+		.cancomplete {
+			background-color: #90EE90; /* Light green */
+		}
+		
+		.isplayer, .thisguild {
+			background-color: #DDFFDD
+		}
+		
+		.treasureavailable {
+			background-color: #ADD8E6; /* Light blue */
+		}
+    </style>
+</head>
+<body>
+
+    <!-- Game Information Display -->
+	<div id="gameInfo">
+		<div style="height: 350px;">
+			<p style="font-weight: bold; font-size: larger;">Guide</p>
+			<p id="guidetext" style="word-wrap: break-word; overflow-wrap: break-word; white-space: normal;">Welcome to GuildEra! <br><br>In this Solo Tutorial we will guide you through a game versus 3 computer opponents for a few rounds. <br><br>You will learn what to do in the different phases of the game, as well as what to pay attention to to outsmart your competition. <br><br>Enter your name and click 'Start' to begin!</p>
+		</div>
+		<p style="font-weight: bold; font-size: larger;">Game Info</p>
+		<p id="currentRound">Current Round: 1</p>
+		<p id="currentPhase">Current Phase: Start</p>
+		<p id="currentEra">Current Era: 1</p>
+		<p style="font-weight: bold; font-size: larger;">Player NAVs</p>
+		<table id='navTable'>
+			<thead>
+				<tr>
+					<th>Player</th>
+					<th>Cash</th>
+					<th>Stock</th>
+					<th>Total</th>
+				</tr>
+			</thead>
+			<tbody id="navtablebody">
+			</tbody>
+		</table>
+
+	</div>
+	<div id="mainContent">
+		<div id="phaseZ" style="display: block;">
+			<h1>GuildEra Solo Tutorial</h1>
+			<h2>What is your name?</h2>
+			<input type="text" id="nameinput" placeholder="Enter your name">
+			<button onclick="startgame()" class="endButton">Start</button>
+		</div>
+		<div id="phaseA" style="display: none;">
+			<h1>Stock Phase</h1>
+			<div style="padding:10px;">
+				<p style="font-weight: bold; display: inline-block;">Tips and reminders   </p>
+				<button onclick="showhiderules()" id="rulesbuttonA" style="display: inline-block;">Show</button>
+				<div id="rulesA" style="display:none;">
+					<p>1. You can't buy new shares if you've already sold a share this round. &#10060;</p>
+					<p>2. If you sell your share in a guild, that guild's share price falls. &#128201;</p>
+					<p>3. You can't sell shares in an unfloated guild. &#10060;</p>
+					<p>4. Guilds are only floated if AT LEAST 4 SHARES have been bought. &#127984;</p>
+					<p>5. If 8+ shares in 1 guild are owned by 3+ players, that guild's share price goes up twice. &#128200;</p>
+				</div>
+			</div>
+			<p style="font-weight: bold; font-size: larger;">Guilds Information</p>
+			<table id="stockroundguildsummary">
+				<thead>
+					<tr>
+						<th>Guild</th>
+						<th>Treasury</th>
+						<th style="background-color: #DDFFFF">Slot 1</th>
+						<th style="background-color: #DDFFFF">Slot 2</th>
+						<th style="background-color: #DDFFFF" class="era2Locked">Slot 3</th>
+						<th style="background-color: #DDFFFF" class="era3Locked">Slot 4</th>
+						<th style="background-color: #DDFFFF">Inventory</th>
+						<th style="background-color: #FFDDDD">Physical<br>Power</th>
+						<th style="background-color: #FFDDDD">Ranged<br>Power</th>
+						<th style="background-color: #FFDDDD">Magic<br>Power</th>
+						<th style="background-color: #FFDDDD">Total<br>Power</th>
+					</tr>
+				</thead>
+				<tbody id="stockroundguildsummarytablebody">
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+			<p style="font-weight: bold; font-size: larger;" id='stockroundTitle'>Buy or sell stocks (1/6)</p>
+			<p id='stockroundTitleCash'></p>
+			<form id="buysellForm">
+				<table id="buysellTable">
+					<thead>
+						<tr>
+							<th>Guild</th>
+							<th>Earnings</th>
+							<th>Multiplier</th>
+							<th>Share Price</th>
+							<th id='stock_header_player1'>Player 1</th>
+							<th id='stock_header_player2'>Player 2</th>
+							<th id='stock_header_player3'>Player 3</th>
+							<th id='stock_header_player4'>Player 4</th>
+							<th>Guildmaster</th>
+							<th>Floated?</th>
+							<th style="border: none; background-color: transparent;">Buy</th>
+							<th style="border: none; background-color: transparent;">Sell</th>
+						</tr>
+					</thead>
+					<tbody id="buyselltablebody">
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+				<p id="stockformlaststep" style="color: grey;"></p>
+			</form>
+			<div>
+				<button id="stockFormButton" onclick="buysellStocks()" class="endButton">Submit</button>
+			</div>
+		</div>
+		<div id="phaseB" style="display: none;">
+			<h1>Stock Phase Results</h1>
+			<table id="stockphaseresultsTable">
+				<thead>
+					<tr>
+						<th>Guild</th>
+						<th>Earnings</th>
+						<th>Multiplier</th>
+						<th>Share Price</th>
+						<th id='stockresult_header_player1'>Player 1</th>
+						<th id='stockresult_header_player2'>Player 2</th>
+						<th id='stockresult_header_player3'>Player 3</th>
+						<th id='stockresult_header_player4'>Player 4</th>
+						<th>Guildmaster</th>
+						<th>Floated?</th>
+					</tr>
+				</thead>
+				<tbody id="stockphaseresultstablebody">
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+			<p id="stockresultlaststep" style="color: grey;"></p>
+			<button id="stockResultButton" onclick="OKButton()" class="endButton">OK</button>
+		</div>
+		<div id="phaseC" style="display: none;">
+			<h1>Raid Planning Phase</h1>
+			<div style="padding:10px;">
+				<p style="font-weight: bold; display: inline-block;">Tips and reminders   </p>
+				<button onclick="showhiderules()" id="rulesbuttonC" style="display: inline-block;">Show</button>
+				<div id="rulesC" style="display:none;">
+					<p>1. You can only hire 1 mercenary per round. &#129497;</p>
+					<p>2. Make sure to equip your weapons. &#9876;&#65039;</p>
+					<p>3. Decide what dungeon you want to raid before spending any money. &#128173;</p>
+					<p>4. If you raid a dungeon with a LOWER REWARD than last round, you will UNDERPERFORM, and your guild's stock price will fall. &#128201;</p>
+				</div>
+			</div>
+			<div id="guildTab" style="display: flex; align-items: center;">
+			</div>
+			<div id="raid_GuildA" style="padding:10px" class="GuildA">
+				<h1>Raid planning for Guild A</h1>
+				<h2>About Guild A:</h2>
+				<p id="raid_GuildA_treasury" style="font-weight: bold;">Treasury: 🪙350</p>
+				<p style="font-weight: bold;">Special Hires:</p><p>You can pay and hire only ONE of them for their ability Era 2 onwards.<br>Special Hire is what makes your guild special, so plan your guild around them.</p>
+				<table>
+					<thead>
+						<tr>
+							<th>Special Hire</th>
+							<th>✓</th>
+							<th>Price</th>
+							<th>Ability</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Martial Art Sifu</td>
+							<td id="raid_GuildA_fact_ability_1_chosen"></td>
+							<td><span>🪙</span>10</td>
+							<td id="raid_GuildA_fact_ability_1_description" style="text-align: left;">(Persistent) Your unequipped fighters get <span class="physical">20</span> extra physical power.</td>
+						</tr>
+					</tbody>
+				</table>
+				<h2 id="raid_GuildA_recruit_heading">Recruit Mercenaries (This guild has <span>🪙</span>350)</h2>
+				<table>
+					<thead>
+						<tr>
+							<th>Mercenary</th>
+							<th>Physical Power</th>
+							<th>Ranged Power</th>
+							<th>Magic Power</th>
+							<th>Effect</th>
+							<th>Price</th>
+							<th style="border: none; background-color: transparent;"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Fighter Lvl 1</td>
+							<td><span class="physical">40</span></td>
+							<td>0</td>
+							<td>0</td>
+							<td></td>
+							<td><span>🪙</span>70</td>
+							<td style="border: none; background-color: transparent;">
+								<button onclick="A_recruitfighter1()" id="A_fighter1_button">Recruit</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="era2Locked">Fighter Lvl 2</td>
+							<td class="era2Locked"><span class="physical">60</span></td>
+							<td class="era2Locked">0</td>
+							<td class="era2Locked">0</td>
+							<td class="era2Locked"></td>
+							<td class="era2Locked"><span>🪙</span>120</td>
+							<td style="border: none; background-color: transparent;">
+								<button onclick="A_recruitfighter2()" id="A_fighter2_button" class="era2Disabled">Recruit</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">Fighter Lvl 3</td>
+							<td class="era3Locked"><span class="physical">70</span></td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"></td>
+							<td class="era3Locked"><span>🪙</span>130</td>
+							<td style="border: none; background-color: transparent;">
+								<button class="era3Disabled">Recruit</button>
+							</td>
+						</tr>
+						<tr>
+							<td>Archer Lvl 1</td>
+							<td>0</td>
+							<td><span class="ranged">20</span></td>
+							<td>0</td>
+							<td></td>
+							<td><span>🪙</span>40</td>
+							<td style="border: none; background-color: transparent;">
+								<button onclick="followguide()" id="A_Archer1_button">Recruit</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="era2Locked">Archer Lvl 2</td>
+							<td class="era2Locked">0</td>
+							<td class="era2Locked"><span class="ranged">30</span></td>
+							<td class="era2Locked">0</td>
+							<td class="era2Locked"></td>
+							<td class="era2Locked"><span>🪙</span>70</td>
+							<td style="border: none; background-color: transparent;">
+								<button onclick="followguide()" id="A_archer2_button" class="era2Disabled">Recruit</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">Archer Lvl 3</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span class="ranged">50</span></td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"></td>
+							<td class="era3Locked"><span>🪙</span>120</td>
+							<td style="border: none; background-color: transparent;">
+								<button class="era3Disabled">Recruit</button>
+							</td>
+						</tr>
+						<tr>
+							<td>Wizard Lvl 1</td>
+							<td>0</td>
+							<td>0</td>
+							<td><span class="magic">20</span></td>
+							<td></td>
+							<td><span>🪙</span>50</td>
+							<td style="border: none; background-color: transparent;">
+								<button onclick="followguide()" id="A_wizard1_button">Recruit</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="era2Locked">Wizard Lvl 2</td>
+							<td class="era2Locked">0</td>
+							<td class="era2Locked">0</td>
+							<td class="era2Locked"><span class="magic">60</span></td>
+							<td class="era2Locked"></td>
+							<td class="era2Locked"><span>🪙</span>110</td>
+							<td style="border: none; background-color: transparent;">
+								<button onclick="followguide()" id="A_wizard2_button" class="era2Disabled">Recruit</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">Wizard Lvl 3</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span class="magic">90</span></td>
+							<td class="era3Locked"></td>
+							<td class="era3Locked"><span>🪙</span>180</td>
+							<td style="border: none; background-color: transparent;">
+								<button class="era3Disabled">Recruit</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<h2 id="raid_GuildA_equipmentshop_heading">Buy Equipments from Shop (This guild has <span>🪙</span>350)</h2>
+				<table>
+					<thead>
+						<tr>
+							<th>Equipment</th>
+							<th>Physical Power</th>
+							<th>Ranged Power</th>
+							<th>Magic Power</th>
+							<th>Effect</th>
+							<th>Price</th>
+							<th style="border: none; background-color: transparent;"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Sword Lvl 1</td>
+							<td><span class="physical">10</span></td>
+							<td>0</td>
+							<td>0</td>
+							<td></td>
+							<td><span>🪙</span>40</td>
+							<td style="border: none; background-color: transparent;">
+								<button onclick="A_buysword1()" id="A_sword1_button">Buy</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="era2Locked">Sword Lvl 2</td>
+							<td class="era2Locked"><span class="physical">20</span></td>
+							<td class="era2Locked">0</td>
+							<td class="era2Locked">0</td>
+							<td class="era2Locked"></td>
+							<td class="era2Locked" data-price="90"><span>🪙</span>90</td>
+							<td style="border: none; background-color: transparent;">
+								<button onclick="followguide()" id="A_sword2_button" class="era2Disabled">Buy</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">Sword Lvl 3</td>
+							<td class="era3Locked"><span class="physical">40</span></td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"></td>
+							<td class="era3Locked"><span>🪙</span>140</td>
+							<td style="border: none; background-color: transparent;">
+								<button class="era3Disabled">Buy</button>
+							</td>
+						</tr>
+						<tr>
+							<td>Bow Lvl 1</td>
+							<td>0</td>
+							<td><span class="ranged">30</span></td>
+							<td>0</td>
+							<td></td>
+							<td><span>🪙</span>90</td>
+							<td style="border: none; background-color: transparent;">
+								<button onclick="followguide()" id="A_bow1_button">Buy</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="era2Locked">Bow Lvl 2</td>
+							<td class="era2Locked">0</td>
+							<td class="era2Locked"><span class="ranged">40</span></td>
+							<td class="era2Locked">0</td>
+							<td class="era2Locked">When equipped by Lvl 2 or 3 Archers get <span class="ranged">60</span> power instead.</td>
+							<td class="era2Locked"><span>🪙</span>110</td>
+							<td style="border: none; background-color: transparent;">
+								<button onclick="followguide()" id="A_bow2_button" class="era2Disabled">Buy</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">Bow Lvl 3</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span class="ranged">60</span></td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">When equipped by Lvl 2 Archers get <span class="ranged">80</span> power instead.<br>When equipped by Lvl 3 Archers get <span class="ranged">110</span> power instead.</td>
+							<td class="era3Locked"><span>🪙</span>160</td>
+							<td style="border: none; background-color: transparent;">
+								<button class="era3Disabled">Buy</button>
+							</td>
+						</tr>
+						<tr>
+							<td>Staff Lvl 1</td>
+							<td>0</td>
+							<td>0</td>
+							<td><span class="magic">30</span></td>
+							<td></td>
+							<td><span>🪙</span>100</td>
+							<td style="border: none; background-color: transparent;">
+								<button onclick="followguide()" id="A_staff1_button">Buy</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="era2Locked">Staff Lvl 2</td>
+							<td class="era2Locked">0</td>
+							<td class="era2Locked">0</td>
+							<td class="era2Locked"><span class="magic">50</span></td>
+							<td class="era2Locked"></td>
+							<td class="era2Locked"><span>🪙</span>120</td>
+							<td style="border: none; background-color: transparent;">
+								<button onclick="followguide()" id="A_staff2_button" class="era2Disabled">Buy</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">Staff Lvl 3</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span class="magic">60</span></td>
+							<td class="era3Locked"></td>
+							<td class="era3Locked"><span>🪙</span>150</td>
+							<td style="border: none; background-color: transparent;">
+								<button class="era3Disabled">Buy</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<h2>Your Lineup</h2>
+				<table>
+					<thead>
+						<tr>
+							<th style="border: none; background-color: transparent;"></th>
+							<th>Mercenary</th>
+							<th>Equipment</th>
+							<th>Physical Power</th>
+							<th>Ranged Power</th>
+							<th>Magic Power</th>
+							<th>Total Power</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Slot 1</td>
+							<td id="A_lineup_slot1_merc">None</td>
+							<td id="A_lineup_slot1_equipment">None</td>
+							<td id="A_lineup_slot1_physical">0</td>
+							<td>0</td>
+							<td>0</td>
+							<td id="A_lineup_slot1_total">0</td>
+						</tr>
+						<tr>
+							<td>Slot 2</td>
+							<td id="A_lineup_slot2_merc">None</td>
+							<td id="A_lineup_slot2_equipment">None</td>
+							<td id="A_lineup_slot2_physical">0</td>
+							<td>0</td>
+							<td>0</td>
+							<td id="A_lineup_slot2_total">0</td>
+						</tr>
+						<tr>
+							<td class="era2Locked">Slot 3</td>
+							<td id="A_lineup_slot3_merc" class="era2Locked">None</td>
+							<td id="A_lineup_slot3_equipment" class="era2Locked">None</td>
+							<td id="A_lineup_slot3_physical" class="era2Locked">0</td>
+							<td class="era2Locked">0</td>
+							<td class="era2Locked">0</td>
+							<td id="A_lineup_slot3_total" class="era2Locked">0</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">Slot 4</td>
+							<td class="era3Locked">None</td>
+							<td class="era3Locked">None</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+						</tr>
+						<tr>
+							<td colspan="3">Total</td>
+							<td id="raid_GuildA_lineup_total_physical">0</td>
+							<td>0</td>
+							<td>0</td>
+							<td id="raid_GuildA_lineup_total_total">0</td>
+						</tr>
+					</tbody>
+				</table>
+				<h2 id="raid_GuildA_spareequipment_heading" style="display: none;">Your Inventory</h2>
+				<table id="raid_GuildA_spareequipment_table" style="display: none;">
+					<thead>
+						<tr>
+							<th>Item</th>
+							<th>Effect</th>
+							<th style="border: none; background-color: transparent;"></th>
+							<th style="border: none; background-color: transparent;"></th>
+						</tr>
+					</thead>
+					<tbody id="raid_GuildA_spareequipment_tablebody"></tbody>
+				</table>
+				<h2 id="raid_GuildA_ability_heading">Special Consultants (This guild has <span>🪙</span>350)</h2>
+				<table id="raid_GuildA_ability_table">
+					<thead>
+						<tr>
+							<th>Guild</th>
+							<th>Special Hire</th>
+							<th>✓</th>
+							<th>Price</th>
+							<th>Ability</th>
+							<th style="border: none; background-color: transparent;"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="thisguild">Guild A</td>
+							<td id="raid_GuildA_ability_A_1_name" class="thisguild notchosenLocked">Martial Art Sifu</td>
+							<td id="raid_GuildA_ability_A_1_chosen" class="thisguild notchosenLocked"></td>
+							<td id="raid_GuildA_ability_A_1_price" class="thisguild notchosenLocked"><span>🪙</span>10</td>
+							<td id="raid_GuildA_ability_A_1_description" class="thisguild notchosenLocked" style="text-align: left;">(Persistent) Earn <span>🪙</span>40 extra if you have 2 or more unique spare equipments.</td>
+							<td id="raid_GuildA_ability_A_1_action" style="border: none; background-color: transparent;">
+								<button id="raid_GuildA_ability_A_1_action_button" disabled="">Choose</button>
+							</td>
+						</tr>
+						<tr>
+							<td>Guild B</td>
+							<td id="raid_GuildA_ability_B_1_name" class="notchosenLocked">Bargainer</td>
+							<td id="raid_GuildA_ability_B_1_chosen" class="notchosenLocked"></td>
+							<td id="raid_GuildA_ability_B_1_price" class="notchosenLocked"><span>🪙</span>50</td>
+							<td id="raid_GuildA_ability_B_1_description" class="notchosenLocked" style="text-align: left;">(Persistent) All equipments are <span>🪙</span>30 cheaper for you.</td><td id="raid_GuildA_ability_B_1_action" style="border: none; background-color: transparent;"></td>
+						</tr>
+						<tr>
+							<td>Guild C</td>
+							<td id="raid_GuildA_ability_C_1_name" class="notchosenLocked">Bargainer</td>
+							<td id="raid_GuildA_ability_C_1_chosen" class="notchosenLocked"></td>
+							<td id="raid_GuildA_ability_C_1_price" class="notchosenLocked"><span>🪙</span>50</td>
+							<td id="raid_GuildA_ability_C_1_description" class="notchosenLocked" style="text-align: left;">(Persistent) All equipments are <span>🪙</span>30 cheaper for you.</td><td id="raid_GuildA_ability_B_1_action" style="border: none; background-color: transparent;"></td>
+						</tr>
+						<tr>
+							<td>Guild D</td>
+							<td id="raid_GuildA_ability_D_1_name" class="notchosenLocked">Bargainer</td>
+							<td id="raid_GuildA_ability_D_1_chosen" class="notchosenLocked"></td>
+							<td id="raid_GuildA_ability_D_1_price" class="notchosenLocked"><span>🪙</span>50</td>
+							<td id="raid_GuildA_ability_D_1_description" class="notchosenLocked" style="text-align: left;">(Persistent) All equipments are <span>🪙</span>30 cheaper for you.</td><td id="raid_GuildA_ability_B_1_action" style="border: none; background-color: transparent;"></td>
+						</tr>
+						<tr>
+							<td>Guild E</td>
+							<td id="raid_GuildA_ability_E_1_name" class="notchosenLocked">Bargainer</td>
+							<td id="raid_GuildA_ability_E_1_chosen" class="notchosenLocked"></td>
+							<td id="raid_GuildA_ability_E_1_price" class="notchosenLocked"><span>🪙</span>50</td>
+							<td id="raid_GuildA_ability_E_1_description" class="notchosenLocked" style="text-align: left;">(Persistent) All equipments are <span>🪙</span>30 cheaper for you.</td><td id="raid_GuildA_ability_B_1_action" style="border: none; background-color: transparent;"></td>
+						</tr>
+						<tr>
+							<td>Guild F</td>
+							<td id="raid_GuildA_ability_F_1_name" class="notchosenLocked">Bargainer</td>
+							<td id="raid_GuildA_ability_F_1_chosen" class="notchosenLocked"></td>
+							<td id="raid_GuildA_ability_F_1_price" class="notchosenLocked"><span>🪙</span>50</td>
+							<td id="raid_GuildA_ability_F_1_description" class="notchosenLocked" style="text-align: left;">(Persistent) All equipments are <span>🪙</span>30 cheaper for you.</td><td id="raid_GuildA_ability_B_1_action" style="border: none; background-color: transparent;"></td>
+						</tr>
+						<tr>
+							<td>Guild G</td>
+							<td id="raid_GuildA_ability_G_1_name" class="notchosenLocked">Bargainer</td>
+							<td id="raid_GuildA_ability_G_1_chosen" class="notchosenLocked"></td>
+							<td id="raid_GuildA_ability_G_1_price" class="notchosenLocked"><span>🪙</span>50</td>
+							<td id="raid_GuildA_ability_G_1_description" class="notchosenLocked" style="text-align: left;">(Persistent) All equipments are <span>🪙</span>30 cheaper for you.</td><td id="raid_GuildA_ability_B_1_action" style="border: none; background-color: transparent;"></td>
+						</tr>
+					</tbody>
+				</table>
+				<h2>Dungeons</h2>
+				<table id="raid_GuildA_dungeon_table">
+					<thead>
+						<tr>
+							<th>Dungeon</th>
+							<th>Physical<br>Requirement</th>
+							<th>Ranged<br>Requirement</th>
+							<th>Magic<br>Requirement</th>
+							<th>Total<br>Requirement</th>
+							<th>Reward</th>
+							<th>Treasure</th>
+							<th>Treasure<br>Status</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td id="raid_GuildA_dungeon_1A_name" class="">1A</td>
+							<td id="raid_GuildA_dungeon_1A_physical">0</td>
+							<td id="raid_GuildA_dungeon_1A_ranged">0</td>
+							<td id="raid_GuildA_dungeon_1A_magic">0</td>
+							<td id="raid_GuildA_dungeon_1A_total"><span class="total">10</span> <span class="missing">(-10)</span></td>
+							<td id="raid_GuildA_dungeon_1A_reward"><span>🪙</span>20</td>
+							<td id="raid_GuildA_dungeon_1A_treasure" class="notreasure"></td>
+							<td id="raid_GuildA_dungeon_1A_status" class="notreasure"></td>
+						</tr>
+						<tr>
+							<td id="raid_GuildA_dungeon_1B_name" class="">1B</td>
+							<td id="raid_GuildA_dungeon_1B_physical">0</td>
+							<td id="raid_GuildA_dungeon_1B_ranged"><span class="ranged">40</span> <span class="missing">(-40)</span></td>
+							<td id="raid_GuildA_dungeon_1B_magic">0</td>
+							<td id="raid_GuildA_dungeon_1B_total">0</td>
+							<td id="raid_GuildA_dungeon_1B_reward"><span>🪙</span>30</td>
+							<td id="raid_GuildA_dungeon_1B_treasure" class="notreasure"></td>
+							<td id="raid_GuildA_dungeon_1B_status" class="notreasure"></td>
+						</tr>
+						<tr>
+							<td id="raid_GuildA_dungeon_1C_name" class="">1C</td>
+							<td id="raid_GuildA_dungeon_1C_physical">0</td>
+							<td id="raid_GuildA_dungeon_1C_ranged">0</td>
+							<td id="raid_GuildA_dungeon_1C_magic"><span class="magic">50</span> <span class="missing">(-50)</span></td>
+							<td id="raid_GuildA_dungeon_1C_total">0</td>
+							<td id="raid_GuildA_dungeon_1C_reward"><span>🪙</span>40</td>
+							<td id="raid_GuildA_dungeon_1C_treasure" class="notreasure"></td>
+							<td id="raid_GuildA_dungeon_1C_status" class="notreasure"></td>
+						</tr>
+						<tr>
+							<td id="raid_GuildA_dungeon_1D_name" class="">1D</td>
+							<td id="raid_GuildA_dungeon_1D_physical"><span class="physical">50</span> <span class="missing">(-50)</span></td>
+							<td id="raid_GuildA_dungeon_1D_ranged">0</td>
+							<td id="raid_GuildA_dungeon_1D_magic">0</td>
+							<td id="raid_GuildA_dungeon_1D_total">0</td>
+							<td id="raid_GuildA_dungeon_1D_reward"><span>🪙</span>40</td>
+							<td id="raid_GuildA_dungeon_1D_treasure" class="notreasure"></td>
+							<td id="raid_GuildA_dungeon_1D_status" class="notreasure"></td>
+						</tr>
+						<tr>
+							<td id="raid_GuildA_dungeon_1E_name" class="">1E</td>
+							<td id="raid_GuildA_dungeon_1E_physical">0</td>
+							<td id="raid_GuildA_dungeon_1E_ranged">0</td>
+							<td id="raid_GuildA_dungeon_1E_magic">0</td>
+							<td id="raid_GuildA_dungeon_1E_total"><span class="total">90</span> <span class="missing">(-90)</span></td>
+							<td id="raid_GuildA_dungeon_1E_reward"><span>🪙</span>50</td>
+							<td id="raid_GuildA_dungeon_1E_treasure"><span>🪙</span>40</td>
+							<td id="raid_GuildA_dungeon_1E_status">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td id="raid_GuildA_dungeon_1F_name" class="">1F</td>
+							<td id="raid_GuildA_dungeon_1F_physical">0</td>
+							<td id="raid_GuildA_dungeon_1F_ranged">0</td>
+							<td id="raid_GuildA_dungeon_1F_magic">0</td>
+							<td id="raid_GuildA_dungeon_1F_total"><span class="total">90</span> <span class="missing">(-90)</span></td>
+							<td id="raid_GuildA_dungeon_1F_reward"><span>🪙</span>60</td>
+							<td id="raid_GuildA_dungeon_1F_treasure"><span>📈</span>: 1</td>
+							<td id="raid_GuildA_dungeon_1F_status">Available (100%)</td>
+						</tr>
+						<tr>
+							<td id="raid_GuildA_dungeon_2A_name" class="era2Locked">2A</td>
+							<td id="raid_GuildA_dungeon_2A_physical" class="era2Locked">0</td>
+							<td id="raid_GuildA_dungeon_2A_ranged" class="era2Locked">0</td>
+							<td id="raid_GuildA_dungeon_2A_magic" class="era2Locked">0</td>
+							<td id="raid_GuildA_dungeon_2A_total" class="era2Locked"><span class="total">70</span> <span class="missing">(-70)</span></td>
+							<td id="raid_GuildA_dungeon_2A_reward" class="era2Locked"><span>🪙</span>60</td>
+							<td id="raid_GuildA_dungeon_2A_treasure" class="era2Locked notreasure"></td>
+							<td id="raid_GuildA_dungeon_2A_status" class="era2Locked notreasure"></td>
+						</tr>
+						<tr>
+							<td id="raid_GuildA_dungeon_2B_name" class="era2Locked">2B</td>
+							<td id="raid_GuildA_dungeon_2B_physical" class="era2Locked"><span class="physical">70</span> <span class="missing">(-70)</span></td>
+							<td id="raid_GuildA_dungeon_2B_ranged" class="era2Locked"><span class="ranged">50</span> <span class="missing">(-50)</span></td>
+							<td id="raid_GuildA_dungeon_2B_magic" class="era2Locked">0</td>
+							<td id="raid_GuildA_dungeon_2B_total" class="era2Locked">0</td>
+							<td id="raid_GuildA_dungeon_2B_reward" class="era2Locked"><span>🪙</span>80</td>
+							<td id="raid_GuildA_dungeon_2B_treasure" class="era2Locked"><span>💎</span>Arcane Grenade<span class="material-symbols-outlined">help</span><div class="tooltip" style="display: none;"></div></td>
+							<td id="raid_GuildA_dungeon_2B_status" class="era2Locked">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td id="raid_GuildA_dungeon_2C_name" class="era2Locked">2C</td>
+							<td id="raid_GuildA_dungeon_2C_physical" class="era2Locked">0</td>
+							<td id="raid_GuildA_dungeon_2C_ranged" class="era2Locked"><span class="ranged">130</span> <span class="missing">(-130)</span></td>
+							<td id="raid_GuildA_dungeon_2C_magic" class="era2Locked">0</td>
+							<td id="raid_GuildA_dungeon_2C_total" class="era2Locked">0</td>
+							<td id="raid_GuildA_dungeon_2C_reward" class="era2Locked"><span>🪙</span>80</td>
+							<td id="raid_GuildA_dungeon_2C_treasure" class="era2Locked"><span>🪙</span>50</td>
+							<td id="raid_GuildA_dungeon_2C_status" class="era2Locked">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td id="raid_GuildA_dungeon_2D_name" class="era2Locked">2D</td>
+							<td id="raid_GuildA_dungeon_2D_physical" class="era2Locked"><span class="physical">40</span> <span class="missing">(-40)</span></td>
+							<td id="raid_GuildA_dungeon_2D_ranged" class="era2Locked">0</td>
+							<td id="raid_GuildA_dungeon_2D_magic" class="era2Locked">0</td>
+							<td id="raid_GuildA_dungeon_2D_total" class="era2Locked"><span class="total">150</span> <span class="missing">(-150)</span></td>
+							<td id="raid_GuildA_dungeon_2D_reward" class="era2Locked"><span>🪙</span>90</td>
+							<td id="raid_GuildA_dungeon_2D_treasure" class="era2Locked"><span>💎</span>Binding Rune<span class="material-symbols-outlined">help</span><div class="tooltip" style="display: none;"></div></td>
+							<td id="raid_GuildA_dungeon_2D_status" class="era2Locked">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td id="raid_GuildA_dungeon_2E_name" class="era2Locked">2E</td>
+							<td id="raid_GuildA_dungeon_2E_physical" class="era2Locked">0</td>
+							<td id="raid_GuildA_dungeon_2E_ranged" class="era2Locked">0</td>
+							<td id="raid_GuildA_dungeon_2E_magic" class="era2Locked"><span class="magic">160</span> <span class="missing">(-160)</span></td>
+							<td id="raid_GuildA_dungeon_2E_total" class="era2Locked">0</td>
+							<td id="raid_GuildA_dungeon_2E_reward" class="era2Locked"><span>🪙</span>100</td>
+							<td id="raid_GuildA_dungeon_2E_treasure" class="era2Locked"><span>🪙</span>50</td>
+							<td id="raid_GuildA_dungeon_2E_status" class="era2Locked">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td id="raid_GuildA_dungeon_2F_name" class="era2Locked">2F</td>
+							<td id="raid_GuildA_dungeon_2F_physical" class="era2Locked"><span class="physical">50</span> <span class="missing">(-50)</span></td>
+							<td id="raid_GuildA_dungeon_2F_ranged" class="era2Locked">0</td>
+							<td id="raid_GuildA_dungeon_2F_magic" class="era2Locked"><span class="magic">130</span> <span class="missing">(-130)</span></td>
+							<td id="raid_GuildA_dungeon_2F_total" class="era2Locked">0</td>
+							<td id="raid_GuildA_dungeon_2F_reward" class="era2Locked"><span>🪙</span>110</td>
+							<td id="raid_GuildA_dungeon_2F_treasure" class="era2Locked"><span>🪙</span>50</td>
+							<td id="raid_GuildA_dungeon_2F_status" class="era2Locked">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td id="raid_GuildA_dungeon_2G_name" class="era2Locked">2G</td>
+							<td id="raid_GuildA_dungeon_2G_physical" class="era2Locked">0</td>
+							<td id="raid_GuildA_dungeon_2G_ranged" class="era2Locked">0</td>
+							<td id="raid_GuildA_dungeon_2G_magic" class="era2Locked">0</td>
+							<td id="raid_GuildA_dungeon_2G_total" class="era2Locked"><span class="total">210</span> <span class="missing">(-210)</span></td>
+							<td id="raid_GuildA_dungeon_2G_reward" class="era2Locked"><span>🪙</span>110</td>
+							<td id="raid_GuildA_dungeon_2G_treasure" class="era2Locked"><span>📈</span>: 2</td>
+							<td id="raid_GuildA_dungeon_2G_status" class="era2Locked">Available (100%)</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">3A</td>
+							<td class="era3Locked"><span class="physical">30</span> <span class="missing">(-30)</span></td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span class="total">120</span> <span class="missing">(-120)</span></td>
+							<td class="era3Locked"><span>🪙</span>90</td>
+							<td class="era3Locked notreasure"></td>
+							<td class="era3Locked notreasure"></td>
+						</tr>
+						<tr>
+							<td class="era3Locked">3B</td>
+							<td class="era3Locked"><span class="physical">40</span> <span class="missing">(-40)</span></td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span class="total">210</span> <span class="missing">(-210)</span></td>
+							<td class="era3Locked"><span>🪙</span>120</td>
+							<td class="era3Locked"><span>💎</span>Hypnotic Charm<span class="material-symbols-outlined">help</span><div class="tooltip" style="display: none;"></div></td>
+							<td class="era3Locked">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">3C</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span class="magic">220</span> <span class="missing">(-220)</span></td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span>🪙</span>130</td>
+							<td class="era3Locked"><span>💎</span>Temporal Seal<span class="material-symbols-outlined">help</span><div class="tooltip" style="display: none;"></div></td>
+							<td class="era3Locked">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">3D</td>
+							<td class="era3Locked"><span class="physical">220</span> <span class="missing">(-220)</span></td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span>🪙</span>130</td>
+							<td class="era3Locked"><span>💎</span>Vol Vessel<span class="material-symbols-outlined">help</span><div class="tooltip" style="display: none;"></div></td>
+							<td class="era3Locked">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">3E</td>
+							<td class="era3Locked"><span class="physical">70</span> <span class="missing">(-70)</span></td>
+							<td class="era3Locked"><span class="ranged">60</span> <span class="missing">(-60)</span></td>
+							<td class="era3Locked"><span class="magic">70</span> <span class="missing">(-70)</span></td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span>🪙</span>140</td>
+							<td class="era3Locked"><span>🪙</span>80</td>
+							<td class="era3Locked">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">3F</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span class="ranged">180</span> <span class="missing">(-180)</span></td>
+							<td class="era3Locked"><span class="magic">90</span> <span class="missing">(-90)</span></td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span>🪙</span>160</td>
+							<td class="era3Locked"><span>🪙</span>80</td>
+							<td class="era3Locked">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">3G</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span class="ranged">290</span> <span class="missing">(-290)</span></td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span>🪙</span>170</td>
+							<td class="era3Locked"><span>💎</span>Executive Rebate<span class="material-symbols-outlined">help</span><div class="tooltip" style="display: none;"></div></td>
+							<td class="era3Locked">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">3H</td>
+							<td class="era3Locked"><span class="physical">140</span> <span class="missing">(-140)</span></td>
+							<td class="era3Locked"><span class="ranged">170</span> <span class="missing">(-170)</span></td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span>🪙</span>180</td>
+							<td class="era3Locked"><span>🪙</span>80</td>
+							<td class="era3Locked">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">3I</td>
+							<td class="era3Locked"><span class="physical">50</span> <span class="missing">(-50)</span></td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span class="total">360</span> <span class="missing">(-360)</span></td>
+							<td class="era3Locked"><span>🪙</span>200</td>
+							<td class="era3Locked"><span>📈</span>: 2</td>
+							<td class="era3Locked">Available (100%)</td>
+						</tr>
+					</tbody>
+				</table>
+				<p>* Chance of looting the treasure if only your guild is raiding this dungeon. Chances will be smaller when multiple guilds raid the same dungeon.</p>
+			</div>
+			<div id="raid_GuildE" style="padding:10px; display: none;" class="GuildE">
+				<h1>Raid planning for Guild E</h1>
+				<h2 id="raid_GuildE_fact_heading">About Guild E:</h2>
+				<p id="raid_GuildE_treasury" style="font-weight: bold;">Treasury: 🪙350</p>
+				<p style="font-weight: bold;">Special Hires:</p><p>You can pay and hire only ONE of them for their ability Era 2 onwards.<br>Special Hire is what makes your guild special, so plan your guild around them.</p>
+				<table id="raid_GuildE_fact_abilitytable">
+					<thead>
+						<tr>
+							<th>Special Hire</th>
+							<th>✓</th>
+							<th>Price</th>
+							<th>Ability</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td id="raid_GuildE_fact_ability_1_name">Curator</td>
+							<td id="raid_GuildE_fact_ability_1_chosen"></td>
+							<td id="raid_GuildE_fact_ability_1_price"><span>🪙</span>10</td>
+							<td id="raid_GuildE_fact_ability_1_description" style="text-align: left;">(Persistent) Your unequipped fighters get <span class="physical">20</span> extra physical power.</td>
+						</tr>
+					</tbody>
+				</table>
+				<h2 id="raid_GuildE_recruit_heading">Recruit Mercenaries (This guild has <span>🪙</span>350)</h2>
+				<table id="raid_GuildE_mercshop_table">
+					<thead>
+						<tr>
+							<th>Mercenary</th>
+							<th>Physical Power</th>
+							<th>Ranged Power</th>
+							<th>Magic Power</th>
+							<th>Effect</th>
+							<th>Price</th>
+							<th style="border: none; background-color: transparent;"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Fighter Lvl 1</td>
+							<td><span class="physical">40</span></td>
+							<td>0</td>
+							<td>0</td>
+							<td></td>
+							<td><span>🪙</span>70</td>
+							<td style="border: none; background-color: transparent;">
+								<button onclick="followguide()" id="E_fighter1_button">Recruit</button>
+							</td>
+						</tr>
+						<tr>
+							<td>Fighter Lvl 2</td>
+							<td><span class="physical">60</span></td>
+							<td>0</td>
+							<td>0</td>
+							<td></td>
+							<td><span>🪙</span>120</td>
+							<td style="border: none; background-color: transparent;">
+								<button onclick="followguide()" id="E_fighter2_button">Recruit</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">Fighter Lvl 3</td>
+							<td class="era3Locked"><span class="physical">70</span></td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"></td>
+							<td class="era3Locked"><span>🪙</span>130</td>
+							<td style="border: none; background-color: transparent;">
+								<button class="era3Disabled">Recruit</button>
+							</td>
+						</tr>
+						<tr>
+							<td>Archer Lvl 1</td>
+							<td>0</td>
+							<td><span class="ranged">20</span></td>
+							<td>0</td>
+							<td></td>
+							<td><span>🪙</span>40</td>
+							<td style="border: none; background-color: transparent;">
+								<button onclick="followguide()" id="E_archer1_button">Recruit</button>
+							</td>
+						</tr>
+						<tr>
+							<td>Archer Lvl 2</td>
+							<td>0</td>
+							<td><span class="ranged">30</span></td>
+							<td>0</td>
+							<td></td>
+							<td><span>🪙</span>70</td>
+							<td style="border: none; background-color: transparent;">
+								<button onclick="followguide()" id="E_archer2_button">Recruit</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">Archer Lvl 3</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span class="ranged">50</span></td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"></td>
+							<td class="era3Locked"><span>🪙</span>120</td>
+							<td style="border: none; background-color: transparent;">
+								<button class="era3Disabled">Recruit</button>
+							</td>
+						</tr>
+						<tr>
+							<td>Wizard Lvl 1</td>
+							<td>0</td>
+							<td>0</td>
+							<td><span class="magic">20</span></td>
+							<td></td>
+							<td><span>🪙</span>50</td>
+							<td style="border: none; background-color: transparent;">
+								<button onclick="followguide()" id="E_wizard1_button">Recruit</button>
+							</td>
+						</tr>
+						<tr>
+							<td>Wizard Lvl 2</td>
+							<td>0</td>
+							<td>0</td>
+							<td><span class="magic">60</span></td>
+							<td></td>
+							<td><span>🪙</span>110</td>
+							<td style="border: none; background-color: transparent;">
+								<button onclick="E_recruitwizard2()" id="E_wizard2_button">Recruit</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">Wizard Lvl 3</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span class="magic">90</span></td>
+							<td class="era3Locked"></td>
+							<td class="era3Locked"><span>🪙</span>180</td>
+							<td style="border: none; background-color: transparent;">
+								<button class="era3Disabled">Recruit</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<h2 id="raid_GuildE_equipmentshop_heading">Buy Equipments from Shop (This guild has <span>🪙</span>350)</h2>
+				<table id="raid_GuildE_equipmentshop_table">
+					<thead>
+						<tr>
+							<th>Equipment</th>
+							<th>Physical Power</th>
+							<th>Ranged Power</th>
+							<th>Magic Power</th>
+							<th>Effect</th>
+							<th>Price</th>
+							<th style="border: none; background-color: transparent;"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Sword Lvl 1</td>
+							<td><span class="physical">10</span></td>
+							<td>0</td>
+							<td>0</td>
+							<td></td>
+							<td><span>🪙</span>40</td>
+							<td style="border: none; background-color: transparent;">
+								<button onclick="followguide()" id="E_sword1_button">Buy</button>
+							</td>
+						</tr>
+						<tr>
+							<td>Sword Lvl 2</td>
+							<td><span class="physical">20</span></td>
+							<td>0</td>
+							<td>0</td>
+							<td id="raid_GuildE_equipmentshop_Sword2_effect"></td>
+							<td id="raid_GuildE_equipmentshop_Sword2_price" data-price="90"><span>🪙</span>90</td>
+							<td style="border: none; background-color: transparent;">
+								<button id="raid_GuildE_equipmentshop_Sword2_button">Buy</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">Sword Lvl 3</td>
+							<td id="raid_GuildE_equipmentshop_Sword3_physical" class="era3Locked"><span class="physical">40</span></td>
+							<td id="raid_GuildE_equipmentshop_Sword3_ranged" class="era3Locked">0</td>
+							<td id="raid_GuildE_equipmentshop_Sword3_magic" class="era3Locked">0</td>
+							<td id="raid_GuildE_equipmentshop_Sword3_effect" class="era3Locked"></td>
+							<td id="raid_GuildE_equipmentshop_Sword3_price" class="era3Locked" data-price="140"><span>🪙</span>140</td>
+							<td style="border: none; background-color: transparent;">
+								<button id="raid_GuildE_equipmentshop_Sword3_button" class="era3Disabled">Buy</button>
+							</td>
+						</tr>
+						<tr>
+							<td>Bow Lvl 1</td>
+							<td id="raid_GuildE_equipmentshop_Bow1_physical">0</td>
+							<td id="raid_GuildE_equipmentshop_Bow1_ranged"><span class="ranged">30</span></td>
+							<td id="raid_GuildE_equipmentshop_Bow1_magic">0</td>
+							<td id="raid_GuildE_equipmentshop_Bow1_effect"></td>
+							<td id="raid_GuildE_equipmentshop_Bow1_price" data-price="90"><span>🪙</span>90</td>
+							<td style="border: none; background-color: transparent;">
+								<button id="raid_GuildE_equipmentshop_Bow1_button">Buy</button>
+							</td>
+						</tr>
+						<tr>
+							<td>Bow Lvl 2</td>
+							<td id="raid_GuildE_equipmentshop_Bow2_physical">0</td>
+							<td id="raid_GuildE_equipmentshop_Bow2_ranged"><span class="ranged">40</span></td>
+							<td id="raid_GuildE_equipmentshop_Bow2_magic">0</td>
+							<td id="raid_GuildE_equipmentshop_Bow2_effect">When equipped by Lvl 2 or 3 Archers get <span class="ranged">60</span> power instead.</td>
+							<td id="raid_GuildE_equipmentshop_Bow2_price" data-price="110"><span>🪙</span>110</td>
+							<td style="border: none; background-color: transparent;">
+								<button id="raid_GuildE_equipmentshop_Bow2_button">Buy</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">Bow Lvl 3</td>
+							<td id="raid_GuildE_equipmentshop_Bow3_physical" class="era3Locked">0</td>
+							<td id="raid_GuildE_equipmentshop_Bow3_ranged" class="era3Locked"><span class="ranged">60</span></td>
+							<td id="raid_GuildE_equipmentshop_Bow3_magic" class="era3Locked">0</td>
+							<td id="raid_GuildE_equipmentshop_Bow3_effect" class="era3Locked">When equipped by Lvl 2 Archers get <span class="ranged">80</span> power instead.<br>When equipped by Lvl 3 Archers get <span class="ranged">110</span> power instead.</td>
+							<td id="raid_GuildE_equipmentshop_Bow3_price" class="era3Locked" data-price="160"><span>🪙</span>160</td>
+							<td style="border: none; background-color: transparent;">
+								<button id="raid_GuildE_equipmentshop_Bow3_button" class="era3Disabled">Buy</button>
+							</td>
+						</tr>
+						<tr>
+							<td>Staff Lvl 1</td>
+							<td id="raid_GuildE_equipmentshop_Staff1_physical">0</td>
+							<td id="raid_GuildE_equipmentshop_Staff1_ranged">0</td>
+							<td id="raid_GuildE_equipmentshop_Staff1_magic"><span class="magic">30</span></td>
+							<td id="raid_GuildE_equipmentshop_Staff1_effect"></td>
+							<td id="raid_GuildE_equipmentshop_Staff1_price" data-price="100"><span>🪙</span>100</td>
+							<td style="border: none; background-color: transparent;">
+								<button id="raid_GuildE_equipmentshop_Staff1_button">Buy</button>
+							</td>
+						</tr>
+						<tr>
+							<td>Staff Lvl 2</td>
+							<td>0</td>
+							<td>0</td>
+							<td><span class="magic">50</span></td>
+							<td></td>
+							<td><span>🪙</span>120</td>
+							<td style="border: none; background-color: transparent;">
+								<button id="raid_GuildE_equipmentshop_Staff2_button">Buy</button>
+							</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">Staff Lvl 3</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span class="magic">60</span></td>
+							<td class="era3Locked"></td>
+							<td class="era3Locked" data-price="150"><span>🪙</span>150</td>
+							<td style="border: none; background-color: transparent;">
+								<button class="era3Disabled">Buy</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<h2 id="raid_GuildE_equipmentotherguild_heading" style="display: none;">Buy Equipments from your other guilds (This guild has <span>🪙</span>350)</h2>
+				<p id="raid_GuildE_equipmentotherguild_text" style="display: none;">You can only do this among all your guilds once per round.</p>
+				<table id="raid_GuildE_equipmentotherguild_table" style="display: none;">
+					<thead>
+						<tr>
+							<th>Equipment</th>
+							<th>Buy from</th>
+							<th>Price</th>
+							<th style="border: none; background-color: transparent;"></th>
+						</tr>
+					</thead>
+					<tbody id="raid_GuildE_equipmentotherguild_tablebody"></tbody>
+				</table>
+				<h2>Your Lineup</h2>
+				<table>
+					<thead>
+						<tr>
+							<th style="border: none; background-color: transparent;"></th>
+							<th>Mercenary</th>
+							<th>Equipment</th>
+							<th>Physical Power</th>
+							<th>Ranged Power</th>
+							<th>Magic Power</th>
+							<th>Total Power</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Slot 1</td>
+							<td id="raid_GuildE_lineup_slot1_merc">None</td>
+							<td id="raid_GuildE_lineup_slot1_equipment">None</td>
+							<td>0</td>
+							<td>0</td>
+							<td id="raid_GuildE_lineup_slot1_magic">0</td>
+							<td id="raid_GuildE_lineup_slot1_total">0</td>
+						</tr>
+						<tr>
+							<td>Slot 2</td>
+							<td>None</td>
+							<td>None</td>
+							<td>0</td>
+							<td>0</td>
+							<td>0</td>
+							<td>0</td>
+						</tr>
+						<tr>
+							<td>Slot 3</td>
+							<td>None</td>
+							<td>None</td>
+							<td>0</td>
+							<td>0</td>
+							<td>0</td>
+							<td>0</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">Slot 4</td>
+							<td class="era3Locked">None</td>
+							<td class="era3Locked">None</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+						</tr>
+						<tr>
+							<td colspan="3">Total</td>
+							<td>0</td>
+							<td>0</td>
+							<td id="raid_GuildE_lineup_total_magic">0</td>
+							<td id="raid_GuildE_lineup_total_total">0</td>
+						</tr>
+					</tbody>
+				</table>
+				<h2 id="raid_GuildE_spareequipment_heading" style="display: none;">Your Inventory</h2>
+				<table id="raid_GuildE_spareequipment_table" style="display: none;">
+					<thead>
+						<tr>
+							<th>Item</th>
+							<th>Effect</th>
+							<th style="border: none; background-color: transparent;"></th>
+							<th style="border: none; background-color: transparent;"></th>
+						</tr>
+					</thead>
+					<tbody id="raid_GuildE_spareequipment_tablebody"></tbody>
+				</table>
+				<h2 id="raid_GuildE_ability_heading">Special Consultants (This guild has <span>🪙</span>350)</h2>
+				<table id="raid_GuildE_ability_table">
+					<thead>
+						<tr>
+							<th>Guild</th>
+							<th>Special Hire</th>
+							<th>✓</th>
+							<th>Price</th>
+							<th>Ability</th>
+							<th style="border: none; background-color: transparent;"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Guild A</td>
+							<td id="raid_GuildE_ability_A_1_name" class="thisguild notchosenLocked">Martial Art Sifu</td>
+							<td id="raid_GuildE_ability_A_1_chosen" class="thisguild notchosenLocked"></td>
+							<td id="raid_GuildE_ability_A_1_price" class="thisguild notchosenLocked"><span>🪙</span>10</td>
+							<td id="raid_GuildE_ability_A_1_description" class="thisguild notchosenLocked" style="text-align: left;">(Persistent) Earn <span>🪙</span>40 extra if you have 2 or more unique spare equipments.</td>
+						</tr>
+						<tr>
+							<td>Guild B</td>
+							<td id="raid_GuildE_ability_B_1_name" class="notchosenLocked">Bargainer</td>
+							<td id="raid_GuildE_ability_B_1_chosen" class="notchosenLocked"></td>
+							<td id="raid_GuildE_ability_B_1_price" class="notchosenLocked"><span>🪙</span>50</td>
+							<td id="raid_GuildE_ability_B_1_description" class="notchosenLocked" style="text-align: left;">(Persistent) All equipments are <span>🪙</span>30 cheaper for you.</td><td id="raid_GuildA_ability_B_1_action" style="border: none; background-color: transparent;"></td>
+						</tr>
+						<tr>
+							<td>Guild C</td>
+							<td id="raid_GuildE_ability_C_1_name" class="notchosenLocked">Bargainer</td>
+							<td id="raid_GuildE_ability_C_1_chosen" class="notchosenLocked"></td>
+							<td id="raid_GuildE_ability_C_1_price" class="notchosenLocked"><span>🪙</span>50</td>
+							<td id="raid_GuildE_ability_C_1_description" class="notchosenLocked" style="text-align: left;">(Persistent) All equipments are <span>🪙</span>30 cheaper for you.</td><td id="raid_GuildA_ability_B_1_action" style="border: none; background-color: transparent;"></td>
+						</tr>
+						<tr>
+							<td>Guild D</td>
+							<td id="raid_GuildE_ability_D_1_name" class="notchosenLocked">Bargainer</td>
+							<td id="raid_GuildE_ability_D_1_chosen" class="notchosenLocked"></td>
+							<td id="raid_GuildE_ability_D_1_price" class="notchosenLocked"><span>🪙</span>50</td>
+							<td id="raid_GuildE_ability_D_1_description" class="notchosenLocked" style="text-align: left;">(Persistent) All equipments are <span>🪙</span>30 cheaper for you.</td><td id="raid_GuildA_ability_B_1_action" style="border: none; background-color: transparent;"></td>
+						</tr>
+						<tr>
+							<td class="thisguild">Guild E</td>
+							<td id="raid_GuildA_ability_E_1_name" class="thisguild notchosenLocked">Curator Art Sifu</td>
+							<td id="raid_GuildA_ability_E_1_chosen" class="thisguild notchosenLocked"></td>
+							<td id="raid_GuildA_ability_E_1_price" class="thisguild notchosenLocked"><span>🪙</span>10</td>
+							<td id="raid_GuildA_ability_E_1_description" class="thisguild notchosenLocked" style="text-align: left;">(Persistent) Earn <span>🪙</span>40 extra if you have 2 or more unique spare equipments.</td>
+							<td id="raid_GuildA_ability_E_1_action" style="border: none; background-color: transparent;">
+								<button id="raid_GuildA_ability_E_1_action_button" disabled="">Choose</button>
+							</td>
+						</tr>
+						<tr>
+							<td>Guild F</td>
+							<td id="raid_GuildE_ability_F_1_name" class="notchosenLocked">Bargainer</td>
+							<td id="raid_GuildE_ability_F_1_chosen" class="notchosenLocked"></td>
+							<td id="raid_GuildE_ability_F_1_price" class="notchosenLocked"><span>🪙</span>50</td>
+							<td id="raid_GuildE_ability_F_1_description" class="notchosenLocked" style="text-align: left;">(Persistent) All equipments are <span>🪙</span>30 cheaper for you.</td><td id="raid_GuildA_ability_B_1_action" style="border: none; background-color: transparent;"></td>
+						</tr>
+						<tr>
+							<td>Guild G</td>
+							<td id="raid_GuildE_ability_G_1_name" class="notchosenLocked">Bargainer</td>
+							<td id="raid_GuildE_ability_G_1_chosen" class="notchosenLocked"></td>
+							<td id="raid_GuildE_ability_G_1_price" class="notchosenLocked"><span>🪙</span>50</td>
+							<td id="raid_GuildE_ability_G_1_description" class="notchosenLocked" style="text-align: left;">(Persistent) All equipments are <span>🪙</span>30 cheaper for you.</td><td id="raid_GuildA_ability_B_1_action" style="border: none; background-color: transparent;"></td>
+						</tr>
+					</tbody>
+				</table>
+				<h2>Dungeons</h2>
+				<table id="raid_GuildE_dungeon_table">
+					<thead>
+						<tr>
+							<th>Dungeon</th>
+							<th>Physical<br>Requirement</th>
+							<th>Ranged<br>Requirement</th>
+							<th>Magic<br>Requirement</th>
+							<th>Total<br>Requirement</th>
+							<th>Reward</th>
+							<th>Treasure</th>
+							<th>Treasure<br>Status</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td id="raid_GuildE_dungeon_1A_name" class="">1A</td>
+							<td id="raid_GuildE_dungeon_1A_physical">0</td>
+							<td id="raid_GuildE_dungeon_1A_ranged">0</td>
+							<td id="raid_GuildE_dungeon_1A_magic">0</td>
+							<td id="raid_GuildE_dungeon_1A_total"><span class="total">10</span> <span class="missing">(-10)</span></td>
+							<td id="raid_GuildE_dungeon_1A_reward"><span>🪙</span>20</td>
+							<td id="raid_GuildE_dungeon_1A_treasure" class="notreasure"></td>
+							<td id="raid_GuildE_dungeon_1A_status" class="notreasure"></td>
+						</tr>
+						<tr>
+							<td id="raid_GuildE_dungeon_1B_name" class="">1B</td>
+							<td id="raid_GuildE_dungeon_1B_physical">0</td>
+							<td id="raid_GuildE_dungeon_1B_ranged"><span class="ranged">40</span> <span class="missing">(-40)</span></td>
+							<td id="raid_GuildE_dungeon_1B_magic">0</td>
+							<td id="raid_GuildE_dungeon_1B_total">0</td>
+							<td id="raid_GuildE_dungeon_1B_reward"><span>🪙</span>30</td>
+							<td id="raid_GuildE_dungeon_1B_treasure" class="notreasure"></td>
+							<td id="raid_GuildE_dungeon_1B_status" class="notreasure"></td>
+						</tr>
+						<tr>
+							<td id="raid_GuildE_dungeon_1C_name" class="">1C</td>
+							<td id="raid_GuildE_dungeon_1C_physical">0</td>
+							<td id="raid_GuildE_dungeon_1C_ranged">0</td>
+							<td id="raid_GuildE_dungeon_1C_magic"><span class="magic">50</span> <span class="missing">(-50)</span></td>
+							<td id="raid_GuildE_dungeon_1C_total">0</td>
+							<td id="raid_GuildE_dungeon_1C_reward"><span>🪙</span>40</td>
+							<td id="raid_GuildE_dungeon_1C_treasure" class="notreasure"></td>
+							<td id="raid_GuildE_dungeon_1C_status" class="notreasure"></td>
+						</tr>
+						<tr>
+							<td id="raid_GuildE_dungeon_1D_name" class="">1D</td>
+							<td id="raid_GuildE_dungeon_1D_physical"><span class="physical">50</span> <span class="missing">(-50)</span></td>
+							<td id="raid_GuildE_dungeon_1D_ranged">0</td>
+							<td id="raid_GuildE_dungeon_1D_magic">0</td>
+							<td id="raid_GuildE_dungeon_1D_total">0</td>
+							<td id="raid_GuildE_dungeon_1D_reward"><span>🪙</span>40</td>
+							<td id="raid_GuildE_dungeon_1D_treasure" class="notreasure"></td>
+							<td id="raid_GuildE_dungeon_1D_status" class="notreasure"></td>
+						</tr>
+						<tr>
+							<td id="raid_GuildE_dungeon_1E_name" class="">1E</td>
+							<td id="raid_GuildE_dungeon_1E_physical">0</td>
+							<td id="raid_GuildE_dungeon_1E_ranged">0</td>
+							<td id="raid_GuildE_dungeon_1E_magic">0</td>
+							<td id="raid_GuildE_dungeon_1E_total"><span class="total">90</span> <span class="missing">(-90)</span></td>
+							<td id="raid_GuildE_dungeon_1E_reward"><span>🪙</span>50</td>
+							<td id="raid_GuildE_dungeon_1E_treasure"><span>🪙</span>40</td>
+							<td id="raid_GuildE_dungeon_1E_status">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td id="raid_GuildE_dungeon_1F_name" class="">1F</td>
+							<td id="raid_GuildE_dungeon_1F_physical">0</td>
+							<td id="raid_GuildE_dungeon_1F_ranged">0</td>
+							<td id="raid_GuildE_dungeon_1F_magic">0</td>
+							<td id="raid_GuildE_dungeon_1F_total"><span class="total">90</span> <span class="missing">(-90)</span></td>
+							<td id="raid_GuildE_dungeon_1F_reward"><span>🪙</span>60</td>
+							<td id="raid_GuildE_dungeon_1F_treasure"><span>📈</span>: 1</td>
+							<td id="raid_GuildE_dungeon_1F_status">Available (100%)</td>
+						</tr>
+						<tr>
+							<td id="raid_GuildE_dungeon_2A_name">2A</td>
+							<td id="raid_GuildE_dungeon_2A_physical">0</td>
+							<td id="raid_GuildE_dungeon_2A_ranged">0</td>
+							<td id="raid_GuildE_dungeon_2A_magic">0</td>
+							<td id="raid_GuildE_dungeon_2A_total"><span class="total">70</span> <span class="missing">(-70)</span></td>
+							<td id="raid_GuildE_dungeon_2A_reward"><span>🪙</span>60</td>
+							<td id="raid_GuildE_dungeon_2A_treasure" class="notreasure"></td>
+							<td id="raid_GuildE_dungeon_2A_status" class="notreasure"></td>
+						</tr>
+						<tr>
+							<td id="raid_GuildE_dungeon_2B_name">2B</td>
+							<td id="raid_GuildE_dungeon_2B_physical"><span class="physical">70</span> <span class="missing">(-70)</span></td>
+							<td id="raid_GuildE_dungeon_2B_ranged"><span class="ranged">50</span> <span class="missing">(-50)</span></td>
+							<td id="raid_GuildE_dungeon_2B_magic">0</td>
+							<td id="raid_GuildE_dungeon_2B_total">0</td>
+							<td id="raid_GuildE_dungeon_2B_reward"><span>🪙</span>80</td>
+							<td id="raid_GuildE_dungeon_2B_treasure"><span>💎</span>Arcane Grenade<span class="material-symbols-outlined">help</span><div class="tooltip" style="display: none;"></div></td>
+							<td id="raid_GuildE_dungeon_2B_status">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td id="raid_GuildE_dungeon_2C_name">2C</td>
+							<td id="raid_GuildE_dungeon_2C_physical">0</td>
+							<td id="raid_GuildE_dungeon_2C_ranged"><span class="ranged">130</span> <span class="missing">(-130)</span></td>
+							<td id="raid_GuildE_dungeon_2C_magic">0</td>
+							<td id="raid_GuildE_dungeon_2C_total">0</td>
+							<td id="raid_GuildE_dungeon_2C_reward"><span>🪙</span>80</td>
+							<td id="raid_GuildE_dungeon_2C_treasure"><span>🪙</span>50</td>
+							<td id="raid_GuildE_dungeon_2C_status">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td id="raid_GuildE_dungeon_2D_name">2D</td>
+							<td id="raid_GuildE_dungeon_2D_physical"><span class="physical">40</span> <span class="missing">(-40)</span></td>
+							<td id="raid_GuildE_dungeon_2D_ranged">0</td>
+							<td id="raid_GuildE_dungeon_2D_magic">0</td>
+							<td id="raid_GuildE_dungeon_2D_total"><span class="total">150</span> <span class="missing">(-150)</span></td>
+							<td id="raid_GuildE_dungeon_2D_reward"><span>🪙</span>90</td>
+							<td id="raid_GuildE_dungeon_2D_treasure"><span>💎</span>Binding Rune<span class="material-symbols-outlined">help</span><div class="tooltip" style="display: none;"></div></td>
+							<td id="raid_GuildE_dungeon_2D_status">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td id="raid_GuildE_dungeon_2E_name">2E</td>
+							<td id="raid_GuildE_dungeon_2E_physical">0</td>
+							<td id="raid_GuildE_dungeon_2E_ranged">0</td>
+							<td id="raid_GuildE_dungeon_2E_magic"><span class="magic">160</span> <span class="missing">(-160)</span></td>
+							<td id="raid_GuildE_dungeon_2E_total">0</td>
+							<td id="raid_GuildE_dungeon_2E_reward"><span>🪙</span>100</td>
+							<td id="raid_GuildE_dungeon_2E_treasure"><span>🪙</span>50</td>
+							<td id="raid_GuildE_dungeon_2E_status">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td id="raid_GuildE_dungeon_2F_name">2F</td>
+							<td id="raid_GuildE_dungeon_2F_physical"><span class="physical">50</span> <span class="missing">(-50)</span></td>
+							<td id="raid_GuildE_dungeon_2F_ranged">0</td>
+							<td id="raid_GuildE_dungeon_2F_magic"><span class="magic">130</span> <span class="missing">(-130)</span></td>
+							<td id="raid_GuildE_dungeon_2F_total">0</td>
+							<td id="raid_GuildE_dungeon_2F_reward"><span>🪙</span>110</td>
+							<td id="raid_GuildE_dungeon_2F_treasure"><span>🪙</span>50</td>
+							<td id="raid_GuildE_dungeon_2F_status">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td id="raid_GuildE_dungeon_2G_name">2G</td>
+							<td id="raid_GuildE_dungeon_2G_physical">0</td>
+							<td id="raid_GuildE_dungeon_2G_ranged">0</td>
+							<td id="raid_GuildE_dungeon_2G_magic">0</td>
+							<td id="raid_GuildE_dungeon_2G_total"><span class="total">210</span> <span class="missing">(-210)</span></td>
+							<td id="raid_GuildE_dungeon_2G_reward"><span>🪙</span>110</td>
+							<td id="raid_GuildE_dungeon_2G_treasure"><span>📈</span>: 2</td>
+							<td id="raid_GuildE_dungeon_2G_status">Available (100%)</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">3A</td>
+							<td class="era3Locked"><span class="physical">30</span> <span class="missing">(-30)</span></td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span class="total">120</span> <span class="missing">(-120)</span></td>
+							<td class="era3Locked"><span>🪙</span>90</td>
+							<td class="era3Locked notreasure"></td>
+							<td class="era3Locked notreasure"></td>
+						</tr>
+						<tr>
+							<td class="era3Locked">3B</td>
+							<td class="era3Locked"><span class="physical">40</span> <span class="missing">(-40)</span></td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span class="total">210</span> <span class="missing">(-210)</span></td>
+							<td class="era3Locked"><span>🪙</span>120</td>
+							<td class="era3Locked"><span>💎</span>Hypnotic Charm<span class="material-symbols-outlined">help</span><div class="tooltip" style="display: none;"></div></td>
+							<td class="era3Locked">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">3C</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span class="magic">220</span> <span class="missing">(-220)</span></td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span>🪙</span>130</td>
+							<td class="era3Locked"><span>💎</span>Temporal Seal<span class="material-symbols-outlined">help</span><div class="tooltip" style="display: none;"></div></td>
+							<td class="era3Locked">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">3D</td>
+							<td class="era3Locked"><span class="physical">220</span> <span class="missing">(-220)</span></td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span>🪙</span>130</td>
+							<td class="era3Locked"><span>💎</span>Vol Vessel<span class="material-symbols-outlined">help</span><div class="tooltip" style="display: none;"></div></td>
+							<td class="era3Locked">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">3E</td>
+							<td class="era3Locked"><span class="physical">70</span> <span class="missing">(-70)</span></td>
+							<td class="era3Locked"><span class="ranged">60</span> <span class="missing">(-60)</span></td>
+							<td class="era3Locked"><span class="magic">70</span> <span class="missing">(-70)</span></td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span>🪙</span>140</td>
+							<td class="era3Locked"><span>🪙</span>80</td>
+							<td class="era3Locked">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">3F</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span class="ranged">180</span> <span class="missing">(-180)</span></td>
+							<td class="era3Locked"><span class="magic">90</span> <span class="missing">(-90)</span></td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span>🪙</span>160</td>
+							<td class="era3Locked"><span>🪙</span>80</td>
+							<td class="era3Locked">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">3G</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span class="ranged">290</span> <span class="missing">(-290)</span></td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span>🪙</span>170</td>
+							<td class="era3Locked"><span>💎</span>Executive Rebate<span class="material-symbols-outlined">help</span><div class="tooltip" style="display: none;"></div></td>
+							<td class="era3Locked">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">3H</td>
+							<td class="era3Locked"><span class="physical">140</span> <span class="missing">(-140)</span></td>
+							<td class="era3Locked"><span class="ranged">170</span> <span class="missing">(-170)</span></td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span>🪙</span>180</td>
+							<td class="era3Locked"><span>🪙</span>80</td>
+							<td class="era3Locked">Available (80%*)</td>
+						</tr>
+						<tr>
+							<td class="era3Locked">3I</td>
+							<td class="era3Locked"><span class="physical">50</span> <span class="missing">(-50)</span></td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked">0</td>
+							<td class="era3Locked"><span class="total">360</span> <span class="missing">(-360)</span></td>
+							<td class="era3Locked"><span>🪙</span>200</td>
+							<td class="era3Locked"><span>📈</span>: 2</td>
+							<td class="era3Locked">Available (100%)</td>
+						</tr>
+					</tbody>
+				</table>
+				<p>* Chance of looting the treasure if only your guild is raiding this dungeon. Chances will be smaller when multiple guilds raid the same dungeon.</p>
+			</div>
+			<div id='raidchoices' style="margin-top:20px;">
+			</div>
+			
+			<button id="raidinputbutton" onclick="submitRaidChoice()" class="endButton">Submit</button>
+		</div>
+		<div id="phaseD" style="display: none;">
+			<h1>Raid Results</h1>
+			<table id="raidresultsTable">
+				<thead>
+					<tr>
+						<th>Guild</th>
+						<th>Dungeon</th>
+						<th>Physical<br>Requirement</th>
+						<th>Ranged<br>Requirement</th>
+						<th>Magic<br>Requirement</th>
+						<th>Total<br>Requirement</th>
+						<th>Result</th>
+						<th>Reward</th>
+						<th>Treasure<br>Looted</th>
+					</tr>
+				</thead>
+				<tbody id="raidresultstablebody">
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+			<table id="raidlogTable">
+				<tbody>
+					<tr>
+						<td id="raidlogAguildname" style='border: none; background-color: transparent; font-weight: bold; text-decoration: underline; text-align: left; padding-top: 20px;'></td>
+						<td id="raidlogBguildname" style='border: none; background-color: transparent; font-weight: bold; text-decoration: underline; text-align: left; padding-top: 20px;'></td>
+					</tr>
+					<tr>
+						<td id="raidlogA" style='border: none; background-color: transparent; text-align: left; vertical-align: top;'></td>
+						<td id="raidlogB" style='border: none; background-color: transparent; text-align: left; vertical-align: top;'></td>
+					</tr>
+					<tr>
+						<td id="raidlogCguildname" style='border: none; background-color: transparent; font-weight: bold; text-decoration: underline; text-align: left; padding-top: 20px;'></td>
+						<td id="raidlogDguildname" style='border: none; background-color: transparent; font-weight: bold; text-decoration: underline; text-align: left; padding-top: 20px;'></td>
+					</tr>
+					<tr>
+						<td id="raidlogC" style='border: none; background-color: transparent; text-align: left; vertical-align: top;'></td>
+						<td id="raidlogD" style='border: none; background-color: transparent; text-align: left; vertical-align: top;'></td>
+					</tr>
+					<tr>
+						<td id="raidlog4guildname" style='border: none; background-color: transparent; font-weight: bold; text-decoration: underline; text-align: left; padding-top: 20px;'></td>
+						<td id="raidlog5guildname" style='border: none; background-color: transparent; font-weight: bold; text-decoration: underline; text-align: left; padding-top: 20px;'></td>
+					</tr>
+					<tr>
+						<td id="raidlog4" style='border: none; background-color: transparent; text-align: left; vertical-align: top;'></td>
+						<td id="raidlog5" style='border: none; background-color: transparent; text-align: left; vertical-align: top;'></td>
+					</tr>
+					<tr>
+						<td id="raidlog6guildname" style='border: none; background-color: transparent; font-weight: bold; text-decoration: underline; text-align: left; padding-top: 20px;'></td>
+					</tr>
+					<tr>
+						<td id="raidlog6" style='border: none; background-color: transparent; text-align: left; vertical-align: top;'></td>
+					</tr>
+				</tbody>
+			</table>
+			<p id="raidlog" style="color: grey;"></p>
+			<button id="raidResultButton" onclick="OKButton()" class="endButton">OK</button>
+		</div>
+		<div id="phaseE" style="display: none;">
+			<h1>Dividend Phase</h1>
+			<div style="padding:10px;">
+				<p style="font-weight: bold; display: inline-block;">Tips and reminders   </p>
+				<button onclick="showhiderules()" id="rulesbuttonE" style="display: inline-block;">Show</button>
+				<div id="rulesE" style="display:none;">
+					<p>1. Remember: you need cash to buy stocks... &#128176;</p>
+					<p>2. ...but your guild needs money to power up and raid better dungeons! &#128170;</p>
+					<p>3. If you pay dividend, earnings are split between ALL shareholders, at 10% per share. &#127856;</p>
+				</div>
+			</div>
+			<p style="font-weight: bold; font-size: larger;">Choose whether your guild(s) would pay dividend this round</p>
+			<form id="divForm">
+				<table id="divTable">
+					<thead>
+						<tr>
+							<th colspan="3" style='border: none; background-color: transparent;'></th>
+							<th colspan="4">Stock Ownership</th>
+							<th colspan="2" style='border:none; background-color: transparent;'>Pay Dividend?</th>
+						</tr>
+						<tr>
+							<th>Guild</th>
+							<th>Earned this round</th>
+							<th>Treasury</th>
+							<th id='divtable_header_player1'>Player 1</th>
+							<th id='divtable_header_player2'>Player 2</th>
+							<th id='divtable_header_player3'>Player 3</th>
+							<th id='divtable_header_player4'>Player 4</th>
+							<th style="border: none; background-color: transparent;">Yes</th>
+							<th style="border: none; background-color: transparent;">No</th>
+						</tr>
+					</thead>
+					<tbody id="divtablebody">
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</form>
+			<button id="divFormButton" onclick="submitDivChoice()" class="divchoicesDisabled endButton">Submit</button>
+		</div>
+		<div id="phaseF" style="display: none;">
+			<h1>Dividend Results</h1>
+			<table id="divresultsTable">
+				<thead>
+					<tr>
+						<th colspan="3" style='border: none; background-color: transparent;'></th>
+						<th colspan="4">Dividend Earned</th>
+					</tr>
+					<tr>
+						<th>Guild</th>
+						<th>Earned this round</th>
+						<th>Pay Dividend?</th>
+						<th id='divresult_header_player1'>Player 1</th>
+						<th id='divresult_header_player2'>Player 2</th>
+						<th id='divresult_header_player3'>Player 3</th>
+						<th id='divresult_header_player4'>Player 4</th>
+					</tr>
+				</thead>
+				<tbody id="divresultstablebody">
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+			<button id='divResultButton' onclick="OKButton()" class="endButton">OK</button>
+		</div>
+	</div>
+</body>
+</html>
