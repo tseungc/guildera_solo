@@ -2158,7 +2158,7 @@
 						<span class="GuildA">Guild A</span>
 						" will raid Dungeon"
 					</label>
-					<select id=""raidchoice_GuildA_dropdown">
+					<select id="raidchoice_GuildA_dropdown">
 						<option value="None">----Choose----</option>
 						<optgroup label=""Era 1">
 							<option value="1A" id="raidchoice_A_1A">
@@ -2206,12 +2206,12 @@
 					</select>
 				</div>
 				<div id="E_raidchoice" style="display: none;">
-					<label for="raidchoice_GuildA_dropdown">
-						"This round "
+					<label for="raidchoice_GuildE_dropdown">
+						This round 
 						<span class="GuildE">Guild E</span>
-						" will raid Dungeon"
+						 will raid Dungeon
 					</label>
-					<select id=""raidchoice_GuildE_dropdown">
+					<select id="raidchoice_GuildE_dropdown">
 						<option value="None">----Choose----</option>
 						<optgroup label=""Era 1">
 							<option value="1A" id="raidchoice_E_1A">
@@ -2393,7 +2393,7 @@
 				</tbody>
 			</table>
 			<p id="raidlog" style="color: grey;"></p>
-			<button id="raidResultButton" onclick="OKButton()" class="endButton">OK</button>
+			<button id="raidResultButton" onclick="raidresultOK()" class="endButton">OK</button>
 		</div>
 		<div id="phaseE" style="display: none;">
 			<h1>Dividend Phase</h1>
@@ -2508,7 +2508,7 @@
 					</tbody>
 				</table>
 			</form>
-			<button id="divFormButton" onclick="submitDivChoice()" class="divchoicesDisabled endButton">Submit</button>
+			<button id="divFormButton" onclick="divsubmit()" class="divchoicesDisabled endButton">Submit</button>
 		</div>
 		<div id="phaseF" style="display: none;">
 			<h1>Dividend Results</h1>
@@ -2594,7 +2594,7 @@
 					</tr>
 				</tbody>
 			</table>
-			<button id='divResultButton' onclick="OKButton()" class="endButton">OK</button>
+			<button onclick="divresultOK()" class="endButton">OK</button>
 		</div>
 	</div>
 </body>

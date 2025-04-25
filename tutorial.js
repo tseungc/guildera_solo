@@ -2,36 +2,6 @@
 
 // Steps
 
-// 0 ->		Enter name and start
-
-// 1 -> 	R1 buy fighter 1
-
-// 2 -> 	R1 buy sword 1
-
-// 3 -> 	R1 equip sword 1
-
-// 4 -> 	R1 raid dungeon 1D
-
-// 5 -> 	R1 raid result click OK
-
-// 6 -> 	R1 dividend choose pay
-
-// 7 -> 	R1 dividend result click OK
-
-// 8 -> 	stock R2S1
-
-// 9 -> 	stock R2S2
-
-// 10 -> 	stock R2S3
-
-// 11 -> 	stock R2S4
-
-// 12 -> 	stock R2S5
-
-// 13 -> 	stock R2S6
-
-// 14 -> 	R2 stock result click OK
-
 // 15 -> 	R2 hire fighter 1
 //	share button with step 1 ->
 
@@ -98,6 +68,49 @@ document.addEventListener('DOMContentLoaded', function() {
 	//Initialize local variables
 	window.step = 0;
 	window.showhiderule = "hide";
+	window.guidtext = {
+		1: "1",
+		2: "2",
+		3: "3",
+		4: "4",
+		5: "5",
+		6: "6",
+		7: "7",
+		8: "8",
+		9: "9",
+		10: "10",
+		11: "11",
+		12: "12",
+		13: "13",
+		14: "14",
+		15: "15",
+		16: "16",
+		17: "17",
+		18: "18",
+		19: "19",
+		20: "20",
+		21: "21",
+		22: "22",
+		23: "23",
+		24: "24",
+		25: "25",
+		26: "26",
+		27: "27",
+		28: "28",
+		29: "29",
+		30: "30",
+		31: "31",
+		32: "32",
+		33: "33",
+		34: "34",
+		35: "35",
+		36: "36",
+		37: "37",
+		38: "38",
+		39: "39",
+		40: "40",
+		41: "41",		
+	}
 
 	// 0 ->		Enter name and start
 	window.startgame = function() {
@@ -115,9 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			// change phase
 			updatephase('C');
 			// change step
-			window.step = 1;
-			// change guide text
-			document.getElementById('guidetext').textContent = 'You are the guildmaster of Guild A.';
+			changestep(1);
 		};
 	};
 
@@ -126,30 +137,40 @@ document.addEventListener('DOMContentLoaded', function() {
 	window.A_recruitfighter1 = function() {
 		if (window.step == 1) {
 			document.getElementById('A_lineup_slot1_merc').textContent = 'Fighter Lvl 1';
-			document.getElementById('A_lineup_slot1_physical').textContent = '<span class="physical">40</span>';
-			document.getElementById('A_lineup_slot1_total').textContent = '<span class="total">40</span>';
-			document.getElementById('A_lineup_total_physical').textContent = '<span class="physical">40</span>';
-			document.getElementById('A_lineup_total_total').textContent = '<span class="total">40</span>';
-			
-			window.step = 2;
+			document.getElementById('A_lineup_slot1_physical').innerHTML = '<span class="physical">40</span>';
+			document.getElementById('A_lineup_slot1_total').innerHTML = '<span class="total">40</span>';
+			document.getElementById('A_lineup_total_physical').innerHTML = '<span class="physical">40</span>';
+			document.getElementById('A_lineup_total_total').innerHTML = '<span class="total">40</span>';
+			// disable all recruit buttons (not 1 by 1, use function)
+			// update all treasury (not 1 by 1, use function)
+			// update all dungeon missing power (not 1 by 1, use function)
+			// update dungeon can complete (+1A)
+			// update raid choice dropdown can complete
+			changestep(2);
 			
 		} else if (window.step == 15) {
 			document.getElementById('A_lineup_slot2_merc').textContent = 'Fighter Lvl 1';
-			document.getElementById('A_lineup_slot2_physical').textContent = '<span class="physical">40</span>';
-			document.getElementById('A_lineup_slot2_total').textContent = '<span class="total">40</span>';
-			document.getElementById('A_lineup_total_physical').textContent = '<span class="physical">90</span>';
-			document.getElementById('A_lineup_total_total').textContent = '<span class="total">90</span>';
+			document.getElementById('A_lineup_slot2_physical').innerHTML = '<span class="physical">40</span>';
+			document.getElementById('A_lineup_slot2_total').innerHTML = '<span class="total">40</span>';
+			document.getElementById('A_lineup_total_physical').innerHTML = '<span class="physical">90</span>';
+			document.getElementById('A_lineup_total_total').innerHTML = '<span class="total">90</span>';
+			// disable all recruit buttons (not 1 by 1, use function)
+			// update all treasury (not 1 by 1, use function)
+			// update all dungeon missing power (not 1 by 1, use function)
+			// update dungeon can complete (+1E, 1F)
+			// update raid choice dropdown can complete (+1E, 1F)
+			changestep(16);
 
-			window.step = 16;
 		} else {
 			followguide();
 		};
-	}
+	};
 
 	window.A_buysword1 = function() {
 		if (window.step == 2) {
 			document.getElementById('raid_GuildA_spareequipment_table').style.display = 'block';
-			window.step = 3;
+			// update treasury
+			changestep(3);
 		} else {
 			followguide();
 		};
@@ -157,17 +178,104 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	window.A_equipsword1 = function() {
 		if (window.step == 3) {
+			// need to check if chosen slot 1 fighter 1 in dropdown, else followguide()
 			document.getElementById('raid_GuildA_spareequipment_table').style.display = 'none';
-			window.step = 4
-		}
-	}
+			document.getElementById('A_lineup_slot1_equipment').textContent = 'Sword Lvl 1';
+			document.getElementById('A_lineup_slot1_physical').innerHTML = '<span class="physical">50</span>';
+			document.getElementById('A_lineup_slot1_total').innerHTML = '<span class="total">50</span>';
+			document.getElementById('A_lineup_total_physical').innerHTML = '<span class="physical">50</span>';
+			document.getElementById('A_lineup_total_total').innerHTML = '<span class="total">50</span>';
+			// update all dungeon missing power (not 1 by 1, use function)
+			// update dungeon can complete (+1D)
+			// update raid choice dropdown can complete (+1D)
+			// show unequip button in line up
+			changestep(4);
+		};
+	};
 
 	window.raidsubmit = function() {
 		if (window.step == 4) {
+			// check if 1D is chosen
 			updatephase('D');
+			changestep(5);
+		} else if (window.step == 16) {
+			// check if 1F is chosen
+			updatephase('D');
+			changestep(17);
 		}
-	}
+	};
 
+	window.raidresultOK = function() {
+		if (window.step == 5) {
+			updatephase('E');
+			changestep(6);
+		} else if (window.step == 17) {
+			updatephase('E');
+			changestep(18);
+		}
+	};
+
+	window.divsubmit = function() {
+		if (window.step == 6) {
+			// check if yes is chosen
+			updatephase('F');
+			changestep(7);
+		} else if (window.step == 18) {
+			// check if no is chosen
+			updatephase('F');
+			changestep(19);
+		};
+	};
+
+	window.divresultOK = function() {
+		if (window.step == 7) {
+			updatephase('A');
+			changestep(8);
+		} else if (window.step == 19) {
+			updatephase('A');
+			changestep(20);
+		};
+	};
+
+	window.stocksubmit = function() {
+		if (window.step == 8) {
+			changestep(9);
+		} else if (window.step == 9) {
+			changestep(10);
+		} else if (window.step == 10) {
+			changestep(11);
+		} else if (window.step == 11) {
+			changestep(12);
+		} else if (window.step == 12) {
+			changestep(13);
+		} else if (window.step == 13) {
+			updatephase('B');
+			changestep(14);
+		} else if (window.step == 20) {
+			changestep(21);
+		} else if (window.step == 21) {
+			changestep(22);
+		} else if (window.step == 22) {
+			changestep(23);
+		} else if (window.step == 23) {
+			changestep(24);
+		} else if (window.step == 24) {
+			changestep(25);
+		} else if (window.step == 25) {
+			updatephase('B');
+			changestep(26);
+		};
+	};
+
+	window.stockresultOK = function() {
+		if (window.step == 14) {
+			updatephase('C');
+			changestep(15);
+		} else if (window.step == 26) {
+			updatephase('C');
+			changestep(27);
+		};
+	};
 
 	window.followguide = function() {
 		alert('Please follow the guide.');
@@ -226,7 +334,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	};
 
-	
+	function changestep(newstep) {
+		window.step = newstep;
+		document.getElementById('guidetext').innerHTML = window.guidtext[newstep];
+	}
 
 
 
