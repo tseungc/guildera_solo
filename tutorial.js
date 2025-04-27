@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	window.A_equipsword1 = function() {
 		if (window.step == 3) {
-			// need to check if chosen slot 1 fighter 1 in dropdown, else followguide()
+			// NEED to check if chosen slot 1 fighter 1 in dropdown, else followguide()
 			document.getElementById('raid_GuildA_spareequipment_table').style.display = 'none';
 			document.getElementById('raid_GuildA_spareequipment_heading').style.display = 'none';
 			document.getElementById('A_lineup_slot1_equipment').textContent = 'Sword Lvl 1';
@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			document.getElementById('A_lineup_slot1_total').innerHTML = '<span class="total">50</span>';
 			document.getElementById('A_lineup_total_physical').innerHTML = '<span class="physical">50</span>';
 			document.getElementById('A_lineup_total_total').innerHTML = '<span class="total">50</span>';
-			// show unequip button in line up
+			// NEED show unequip button in line up
 			change_A_all_missing_physical_power(50);
 			change_A_all_missing_total_power(50);
 			document.getElementById('raid_GuildA_dungeon_1D_name').classList.add('cancomplete');
@@ -210,13 +210,41 @@ document.addEventListener('DOMContentLoaded', function() {
 		};
 	};
 
+	window.A_unequipsword1 = function () {
+		if (window.step == 28) {
+			// NEED update martial art sifu description
+			// NEED show spare equipment
+			// NEED update line up power
+			// NEED update missing power
+			// NEED update can complete if appropraite
+		} else {
+			followguide();
+		}
+	}
+
+	window.E_recruitwizard2 = function() {
+		if (window.step == 32) {
+			document.getElementById('E_lineup_slot2_merc').textContent = 'Wizard Lvl 1';
+			document.getElementById('A_lineup_slot1_magic').innerHTML = '<span class="magic">60</span>';
+			document.getElementById('A_lineup_slot1_total').innerHTML = '<span class="total">60</span>';
+			document.getElementById('A_lineup_total_magic').innerHTML = '<span class="magic">60</span>';
+			document.getElementById('A_lineup_total_magic').innerHTML = '<span class="total">60</span>';
+			disable_E_recruit_buttons();
+			update_E_treasury(240);
+			change_E_all_missing_magic_power(60);
+			change_E_all_missing_total_power(60);
+			// update all cancompletes (dungeo table and dropdown menu)
+			alert('Recruitment Successful.')
+			changestep(2);		}
+	}
+
 	window.raidsubmit = function() {
 		if (window.step == 4) {
-			// check if 1D is chosen
+			// NEED check if 1D is chosen
 			updatephase('D');
 			changestep(5);
 		} else if (window.step == 16) {
-			// check if 1F is chosen
+			// NEED check if 1F is chosen
 			updatephase('D');
 			changestep(17);
 		}
@@ -234,15 +262,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	window.divsubmit = function() {
 		if (window.step == 6) {
-			// check if yes is chosen
+			// NEED check if yes is chosen
 			updatephase('F');
 			changestep(7);
 		} else if (window.step == 18) {
-			// check if no is chosen
+			// NEED check if no is chosen
 			updatephase('F');
 			changestep(19);
 		} else if (window.step == 39) {
-			// check if right combo is chosen
+			// NEED check if right combo is chosen
 			updatephase('F');
 			changestep(40);
 		}
@@ -290,10 +318,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	window.stockresultOK = function() {
 		if (window.step == 14) {
-			updatephase('C');
 			enable_A_recruit_buttons();
+			updatephase('C');
 			changestep(15);
 		} else if (window.step == 26) {
+			document.getElementById("guildtab_GuildE_button").style.display = 'block';
+			enable_A_recruit_buttons();
 			updatephase('C');
 			changestep(27);
 		};
@@ -315,6 +345,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	window.stockformradioclick = function(e) {
 		window.stockchoice = e.currentTarget.value;
+	}
+
+	window.gotoGuildE = function(e) {
+		document.getElementById('guildtab_GuildA_button').classList.remove('alreadyshowing');
+		document.getElementById('guildtab_GuildE_button').classList.add('alreadyshowing');
+		document.getElementById('raid_GuildA').style.display = 'none';
+		document.getElementById('raid_GuildE').style.display = 'block';
 	}
 
 	function updatephase(phase) {
