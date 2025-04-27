@@ -147,7 +147,8 @@ document.addEventListener('DOMContentLoaded', function() {
 			change_A_all_missing_physical_power(40);
 			change_A_all_missing_total_power(40);
 			document.getElementById('raid_GuildA_dungeon_1A_name').classList.add('cancomplete');
-			// update raid choice dropdown can complete
+			document.getElementById('raidchoice_A_1A').classList.add('cancomplete');
+			document.getElementById('raidchoice_A_1A').innerHTML = '1A &#10004;';
 			alert('Recruitment Successful.')
 			changestep(2);
 			
@@ -163,7 +164,10 @@ document.addEventListener('DOMContentLoaded', function() {
 			change_A_all_missing_total_power(90);
 			document.getElementById('raid_GuildA_dungeon_1E_name').classList.add('cancomplete');
 			document.getElementById('raid_GuildA_dungeon_1F_name').classList.add('cancomplete');
-			// update raid choice dropdown can complete (+1E, 1F)
+			document.getElementById('raidchoice_A_1E').classList.add('cancomplete');
+			document.getElementById('raidchoice_A_1E').innerHTML = '1E &#10004;';
+			document.getElementById('raidchoice_A_1F').classList.add('cancomplete');
+			document.getElementById('raidchoice_A_1F').innerHTML = '1F &#10004;';
 			alert('Recruitment Successful.')
 			changestep(16);
 
@@ -194,11 +198,12 @@ document.addEventListener('DOMContentLoaded', function() {
 			document.getElementById('A_lineup_slot1_total').innerHTML = '<span class="total">50</span>';
 			document.getElementById('A_lineup_total_physical').innerHTML = '<span class="physical">50</span>';
 			document.getElementById('A_lineup_total_total').innerHTML = '<span class="total">50</span>';
+			// show unequip button in line up
 			change_A_all_missing_physical_power(50);
 			change_A_all_missing_total_power(50);
-			// update dungeon can complete (+1D)
-			// update raid choice dropdown can complete (+1D)
-			// show unequip button in line up
+			document.getElementById('raid_GuildA_dungeon_1D_name').classList.add('cancomplete');
+			document.getElementById('raidchoice_A_1D').classList.add('cancomplete');
+			document.getElementById('raidchoice_A_1D').innerHTML = '1D &#10004;';
 			changestep(4);
 		};
 	};
