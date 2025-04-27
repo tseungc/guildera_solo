@@ -328,6 +328,19 @@ document.addEventListener('DOMContentLoaded', function() {
 		} else if (window.step == 26) {
 			document.getElementById("guildtab_GuildE_button").style.display = 'block';
 			enable_A_recruit_buttons();
+			removeclass('era2Locked');
+			removeclass('era2Disabled');
+			document.getElementById('A_optgroup2').style.display = 'block';
+			document.getElementById('raidchoice_A_2A').style.display = 'block';
+			document.getElementById('raidchoice_A_2C').style.display = 'block';
+			document.getElementById('raidchoice_A_2B').style.display = 'block';
+			document.getElementById('raidchoice_A_2D').style.display = 'block';
+			document.getElementById('raidchoice_A_2E').style.display = 'block';
+			document.getElementById('raidchoice_A_2F').style.display = 'block';
+			document.getElementById('raidchoice_A_2G').style.display = 'block';
+			document.getElementById('raid_GuildA_dungeon_2A_name').classList.add('cancomplete');
+			document.getElementById('raidchoice_A_2A').classList.add('cancomplete');
+			document.getElementById('raidchoice_A_2A').innerHTML = '2A &#10004;';
 			updatephase('C');
 			changestep(27);
 		};
@@ -556,4 +569,10 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 		};
 	};
+	function removeclass(className) {
+		const elements = document.querySelectorAll('.' + className);
+		elements.forEach(function(element) {
+			element.classList.remove(className);
+		});
+	}	
 });
