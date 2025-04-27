@@ -174,6 +174,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	window.A_buysword1 = function() {
 		if (window.step == 2) {
 			document.getElementById('raid_GuildA_spareequipment_table').style.display = 'block';
+			document.getElementById('raid_GuildA_spareequipment_heading').style.display = 'block';
 			update_A_treasury(240);
 			alert('Purchase Successful.')
 			changestep(3);
