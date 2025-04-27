@@ -302,6 +302,20 @@ document.addEventListener('DOMContentLoaded', function() {
 		alert('Please follow the guide.');
 	};
 
+	window.A_divformradioclick = function(e) {
+		window.A_div = e.currentTarget.value;
+		checkalldivselect();
+	}
+
+	window.E_divformradioclick = function(e) {
+		window.E_div = e.currentTarget.value;
+		checkalldivselect();
+	}
+
+	window.stockformradioclick = function(e) {
+		window.stockchoice = e.currentTarget.value;
+	}
+
 	function updatephase(phase) {
 		document.getElementById('phaseZ').style.display = 'none';
 		document.getElementById('phaseA').style.display = 'none';
@@ -472,16 +486,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		document.getElementById('raid_GuildE_equipmentotherguild_heading').innerHTML = 'Buy Equipment from your other guilds (This guild has <span>&#129689;</span>' + String(treasury) + ')';
 		document.getElementById("raid_GuildE_ability_heading").innerHTML = 'Special Consultants (This guild has <span>&#129689;</span>' + String(treasury) + ')';
 	};
-
-	function A_divformradioclick(e) {
-		window.A_div = e.currentTarget.value;
-		checkalldivselect();
-	}
-
-	function E_divformradioclick(e) {
-		window.E_div = e.currentTarget.value;
-		checkalldivselect();
-	}
 
 	function checkalldivselect() {
 		if (window.step == 6) {
