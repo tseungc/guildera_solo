@@ -291,6 +291,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	window.stockresultOK = function() {
 		if (window.step == 14) {
 			updatephase('C');
+			enable_A_recruit_buttons();
 			changestep(15);
 		} else if (window.step == 26) {
 			updatephase('C');
