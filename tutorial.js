@@ -316,7 +316,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	function disable_A_recruit_buttons() {
 		document.getElementById('A_fighter1_button').classList.add('recruitedDisabled');
-//		document.getElementById('A_fighter2_button').classList.add('recruitedDisabled');
+		document.getElementById('A_fighter2_button').classList.add('recruitedDisabled');
 //		document.getElementById('A_archer1_button').classList.add('recruitedDisabled');
 //		document.getElementById('A_archer2_button').classList.add('recruitedDisabled');
 //		document.getElementById('A_wizard1_button').classList.add('recruitedDisabled');
