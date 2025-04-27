@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			updatephase('E');
 			changestep(6);
 		} else if (window.step == 17) {
-			document.getElementById('').checked = false;
+			document.getElementById('radioform_A_yes').checked = false;
 			document.getElementById('divFormButton').classList.add('divchoicesDisabled');
 			updatephase('E');
 			changestep(18);
