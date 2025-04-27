@@ -143,7 +143,8 @@ document.addEventListener('DOMContentLoaded', function() {
 			document.getElementById('A_lineup_total_total').innerHTML = '<span class="total">40</span>';
 			// disable all recruit buttons (not 1 by 1, use function)
 			// update all treasury (not 1 by 1, use function)
-			// update all dungeon missing power (not 1 by 1, use function)
+			change_A_all_missing_physical_power(40);
+			change_A_all_missing_total_power(40);
 			// update dungeon can complete (+1A)
 			// update raid choice dropdown can complete
 			changestep(2);
@@ -156,7 +157,8 @@ document.addEventListener('DOMContentLoaded', function() {
 			document.getElementById('A_lineup_total_total').innerHTML = '<span class="total">90</span>';
 			// disable all recruit buttons (not 1 by 1, use function)
 			// update all treasury (not 1 by 1, use function)
-			// update all dungeon missing power (not 1 by 1, use function)
+			change_A_all_missing_physical_power(90);
+			change_A_all_missing_total_power(90);
 			// update dungeon can complete (+1E, 1F)
 			// update raid choice dropdown can complete (+1E, 1F)
 			changestep(16);
@@ -185,7 +187,8 @@ document.addEventListener('DOMContentLoaded', function() {
 			document.getElementById('A_lineup_slot1_total').innerHTML = '<span class="total">50</span>';
 			document.getElementById('A_lineup_total_physical').innerHTML = '<span class="physical">50</span>';
 			document.getElementById('A_lineup_total_total').innerHTML = '<span class="total">50</span>';
-			// update all dungeon missing power (not 1 by 1, use function)
+			change_A_all_missing_physical_power(50);
+			change_A_all_missing_total_power(50);
 			// update dungeon can complete (+1D)
 			// update raid choice dropdown can complete (+1D)
 			// show unequip button in line up
@@ -339,8 +342,90 @@ document.addEventListener('DOMContentLoaded', function() {
 		document.getElementById('guidetext').innerHTML = window.guidtext[newstep];
 	}
 
+	function change_A_all_missing_physical_power(number) {
+		change_A_missing_physical_power('1D', number);
+		change_A_missing_physical_power('2B', number);
+		change_A_missing_physical_power('2D', number);
+		change_A_missing_physical_power('2F', number);
+		change_A_missing_physical_power('3A', number);
+		change_A_missing_physical_power('3B', number);
+		change_A_missing_physical_power('3D', number);
+		change_A_missing_physical_power('3E', number);
+		change_A_missing_physical_power('3H', number);
+		change_A_missing_physical_power('3I', number);
+	}
 
+	function change_A_missing_physical_power(dungeon, number) {
+		let dungeonreq = document.getElementById("raid_GuildA_dungeon_" + dungeon + "_physical").dataset.req;
+		let diff = +dungeonreq - number;
+		if (diff > 0) {
+			document.getElementById("raid_GuildA_dungeon_" + dungeon + "_physical").innerHTML = '<span class="physical">' + String(dungeonreq) + '</span> <span class="missing">(-' + String(diff) + ')</span></td>';
+		} else {
+			document.getElementById("raid_GuildA_dungeon_" + dungeon + "_physical").innerHTML = '<span class="physical">' + String(dungeonreq) + '</span>';
+		};
+	}
 
+	function change_A_all_missing_total_power(number) {
+		change_A_missing_total_power('1A', number);
+		change_A_missing_total_power('1E', number);
+		change_A_missing_total_power('1F', number);
+		change_A_missing_total_power('2A', number);
+		change_A_missing_total_power('2D', number);
+		change_A_missing_total_power('2G', number);
+		change_A_missing_total_power('3A', number);
+		change_A_missing_total_power('3B', number);
+		change_A_missing_total_power('3I', number);
+	}
 
+	function change_A_missing_total_power(dungeon, number) {
+		let dungeonreq = document.getElementById("raid_GuildA_dungeon_" + dungeon + "_total").dataset.req;
+		let diff = +dungeonreq - number;
+		if (diff > 0) {
+			document.getElementById("raid_GuildA_dungeon_" + dungeon + "_total").innerHTML = '<span class="total">' + String(dungeonreq) + '</span> <span class="missing">(-' + String(diff) + ')</span></td>';
+		} else {
+			document.getElementById("raid_GuildA_dungeon_" + dungeon + "_total").innerHTML = '<span class="total">' + String(dungeonreq) + '</span>';
+		};
+	}
+
+	function change_E_all_missing_magic_power(number) {
+		change_E_missing_total_power('1C', number);
+		change_E_missing_total_power('2E', number);
+		change_E_missing_total_power('2F', number);
+		change_E_missing_total_power('3C', number);
+		change_E_missing_total_power('3E', number);
+		change_E_missing_total_power('3F', number);
+	}
+
+	function change_E_missing_magic_poiwer(dungeon, number) {
+		let dungeonreq = document.getElementById("raid_GuildE_dungeon_" + dungeon + "_magic").dataset.req;
+		let diff = +dungeonreq - number;
+		if (diff > 0) {
+			document.getElementById("raid_GuildE_dungeon_" + dungeon + "_magic").innerHTML = '<span class="magic">' + String(dungeonreq) + '</span> <span class="missing">(-' + String(diff) + ')</span></td>';
+		} else {
+			document.getElementById("raid_GuildE_dungeon_" + dungeon + "_magic").innerHTML = '<span class="magic">' + String(dungeonreq) + '</span>';
+		};
+	}
+
+	function change_E_all_missing_total_power(number) {
+		change_E_missing_total_power('1A', number);
+		change_E_missing_total_power('1E', number);
+		change_E_missing_total_power('1F', number);
+		change_E_missing_total_power('2A', number);
+		change_E_missing_total_power('2D', number);
+		change_E_missing_total_power('2G', number);
+		change_E_missing_total_power('3A', number);
+		change_E_missing_total_power('3B', number);
+		change_E_missing_total_power('3I', number);
+	}
+
+	function change_E_missing_total_power(dungeon, number) {
+		let dungeonreq = document.getElementById("raid_GuildE_dungeon_" + dungeon + "_total").dataset.req;
+		let diff = +dungeonreq - number;
+		if (diff > 0) {
+			document.getElementById("raid_GuildE_dungeon_" + dungeon + "_total").innerHTML = '<span class="total">' + String(dungeonreq) + '</span> <span class="missing">(-' + String(diff) + ')</span></td>';
+		} else {
+			document.getElementById("raid_GuildE_dungeon_" + dungeon + "_total").innerHTML = '<span class="total">' + String(dungeonreq) + '</span>';
+		};
+	};
 
 });
