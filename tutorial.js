@@ -247,7 +247,9 @@ document.addEventListener('DOMContentLoaded', function() {
 			// NEED check if 1F is chosen
 			updatephase('D');
 			changestep(17);
-		}
+		} else {
+			followguid();
+		};
 	};
 
 	window.raidresultOK = function() {
@@ -255,7 +257,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			updatephase('E');
 			changestep(6);
 		} else if (window.step == 17) {
-			document.getElementById('radioform_A_yes').checked = false;
+			document.getElementById('radioform_A_no').checked = false;
 			document.getElementById('divFormButton').classList.add('divchoicesDisabled');
 			updatephase('E');
 			changestep(18);
