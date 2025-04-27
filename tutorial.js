@@ -187,6 +187,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		if (window.step == 3) {
 			// need to check if chosen slot 1 fighter 1 in dropdown, else followguide()
 			document.getElementById('raid_GuildA_spareequipment_table').style.display = 'none';
+			document.getElementById('raid_GuildA_spareequipment_heading').style.display = 'none';
 			document.getElementById('A_lineup_slot1_equipment').textContent = 'Sword Lvl 1';
 			document.getElementById('A_lineup_slot1_physical').innerHTML = '<span class="physical">50</span>';
 			document.getElementById('A_lineup_slot1_total').innerHTML = '<span class="total">50</span>';
