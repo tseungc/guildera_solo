@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			document.getElementById('A_lineup_slot1_total').innerHTML = '<span class="total">40</span>';
 			document.getElementById('A_lineup_total_physical').innerHTML = '<span class="physical">40</span>';
 			document.getElementById('A_lineup_total_total').innerHTML = '<span class="total">40</span>';
-			// disable all recruit buttons (not 1 by 1, use function)
+			disable_A_recruit_buttons();
 			update_A_treasury(280);
 			change_A_all_missing_physical_power(40);
 			change_A_all_missing_total_power(40);
@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			document.getElementById('A_lineup_slot2_total').innerHTML = '<span class="total">40</span>';
 			document.getElementById('A_lineup_total_physical').innerHTML = '<span class="physical">90</span>';
 			document.getElementById('A_lineup_total_total').innerHTML = '<span class="total">90</span>';
-			// disable all recruit buttons (not 1 by 1, use function)
+			disable_A_recruit_buttons();
 			update_A_treasury(170);
 			change_A_all_missing_physical_power(90);
 			change_A_all_missing_total_power(90);
@@ -311,31 +311,43 @@ document.addEventListener('DOMContentLoaded', function() {
 		document.getElementById('raid_GuildE_ability_heading').textContent = 'Special Consultants (This guild has <span>🪙</span>' + gold + ')';
 	}
 
-	function update_A_dungeon_missingpower(power) {
-
-	};
-
-	function update_E_dungeon_missingpower(power) {
-
-	};
-
 	function disable_A_recruit_buttons() {
-
+		document.getElementById('A_fighter1_button').classList.add('recruitedDisabled');
+		document.getElementById('A_fighter2_button').classList.add('recruitedDisabled');
+		document.getElementById('A_archer1_button').classList.add('recruitedDisabled');
+		document.getElementById('A_archer2_button').classList.add('recruitedDisabled');
+		document.getElementById('A_wizard1_button').classList.add('recruitedDisabled');
+		document.getElementById('A_wizard2_button').classList.add('recruitedDisabled');
 	};
 
 	
 	function disable_E_recruit_buttons() {
-
+		document.getElementById('E_fighter1_button').classList.add('recruitedDisabled');
+		document.getElementById('E_fighter2_button').classList.add('recruitedDisabled');
+		document.getElementById('E_archer1_button').classList.add('recruitedDisabled');
+		document.getElementById('E_archer2_button').classList.add('recruitedDisabled');
+		document.getElementById('E_wizard1_button').classList.add('recruitedDisabled');
+		document.getElementById('E_wizard2_button').classList.add('recruitedDisabled');
 	};
 
 	
 	function enable_A_recruit_buttons() {
-
+		document.getElementById('A_fighter1_button').classList.remove('recruitedDisabled');
+		document.getElementById('A_fighter2_button').classList.remove('recruitedDisabled');
+		document.getElementById('A_archer1_button').classList.remove('recruitedDisabled');
+		document.getElementById('A_archer2_button').classList.remove('recruitedDisabled');
+		document.getElementById('A_wizard1_button').classList.remove('recruitedDisabled');
+		document.getElementById('A_wizard2_button').classList.remove('recruitedDisabled');
 	};
 
 	
 	function enable_E_recruit_buttons() {
-
+		document.getElementById('E_fighter1_button').classList.remove('recruitedDisabled');
+		document.getElementById('E_fighter2_button').classList.remove('recruitedDisabled');
+		document.getElementById('E_archer1_button').classList.remove('recruitedDisabled');
+		document.getElementById('E_archer2_button').classList.remove('recruitedDisabled');
+		document.getElementById('E_wizard1_button').classList.remove('recruitedDisabled');
+		document.getElementById('E_wizard2_button').classList.remove('recruitedDisabled');
 	};
 
 	function changestep(newstep) {
