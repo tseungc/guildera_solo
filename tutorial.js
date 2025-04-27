@@ -297,14 +297,14 @@ document.addEventListener('DOMContentLoaded', function() {
 		document.getElementById('phase' + phase).style.display = 'block';
 	}
 
-	function update_raid_A_treasury(gold) {
+	function update_A_treasury(gold) {
 		document.getElementById('raid_GuildA_treasury').textContent = 'Treasury: 🪙' + gold;
 		document.getElementById('raid_GuildA_recruit_heading').textContent = 'Recruit Mercenaries (This guild has <span>🪙</span>' + gold + ')';
 		document.getElementById('raid_GuildA_equipmentshop_heading').textContent = 'Buy Equipments from Shop (This guild has <span>🪙</span>' + gold + ')';
 		document.getElementById('raid_GuildA_ability_heading').textContent = 'Special Consultants (This guild has <span>🪙</span>' + gold + ')';
 	}
 
-	function update_raid_E_treasury(gold) {
+	function update_E_treasury(gold) {
 		document.getElementById('raid_GuildE_treasury').textContent = 'Treasury: 🪙' + gold;
 		document.getElementById('raid_GuildE_recruit_heading').textContent = 'Recruit Mercenaries (This guild has <span>🪙</span>' + gold + ')';
 		document.getElementById('raid_GuildE_equipmentshop_heading').textContent = 'Buy Equipments from Shop (This guild has <span>🪙</span>' + gold + ')';
