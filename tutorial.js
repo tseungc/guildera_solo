@@ -255,6 +255,8 @@ document.addEventListener('DOMContentLoaded', function() {
 			updatephase('E');
 			changestep(6);
 		} else if (window.step == 17) {
+			document.getElementById('').checked = false;
+			document.getElementById('divFormButton').classList.add('divchoicesDisabled');
 			updatephase('E');
 			changestep(18);
 		}
@@ -348,10 +350,14 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 
 	window.gotoGuildE = function(e) {
-		document.getElementById('guildtab_GuildA_button').classList.remove('alreadyshowing');
-		document.getElementById('guildtab_GuildE_button').classList.add('alreadyshowing');
-		document.getElementById('raid_GuildA').style.display = 'none';
-		document.getElementById('raid_GuildE').style.display = 'block';
+		if (window.step == 30) {
+			document.getElementById('guildtab_GuildA_button').classList.remove('alreadyshowing');
+			document.getElementById('guildtab_GuildE_button').classList.add('alreadyshowing');
+			document.getElementById('raid_GuildA').style.display = 'none';
+			document.getElementById('raid_GuildE').style.display = 'block';
+		} else {
+			followguide();
+		}
 	}
 
 	function updatephase(phase) {

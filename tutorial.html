@@ -865,7 +865,7 @@
 			</div>
 			<div id="guildTab" style="display: flex; align-items: center;">
 				<h1 style="margin-right: 10px; font-size: 2em;">You are the guildmaster of</h1>
-				<button class="GuildAButton alreadyshowing" id="guildtab_GuildA_button" style="font-size: 2em; padding: 5px 10px; margin-right: 5px;">Guild A</button>
+				<button class="GuildAButton alreadyshowing" id="guildtab_GuildA_button" onclick="followguide()" style="font-size: 2em; padding: 5px 10px; margin-right: 5px;">Guild A</button>
 				<button class="GuildEButton" id="guildtab_GuildE_button" onclick="gotoGuildE()" style="font-size: 2em; padding: 5px 10px; margin-right: 5px; display: none;">Guild E</button>
 			</div>
 			<div id="raid_GuildA" style="padding:10px" class="GuildA">
@@ -2435,10 +2435,10 @@
 							<td id="divform_GuildA_player3">0</td>
 							<td id="divform_GuildA_player4">0</td>
 							<td style="border: none; background-color: transparent;">
-								<input onclick="A_divformradioclick(event)" type="radio" name="GuildA_div" value="Yes" class="" data-guild="A">
+								<input id="radioform_A_yes" onclick="A_divformradioclick(event)" type="radio" name="GuildA_div" value="Yes" class="" data-guild="A">
 							</td>
 							<td style="border: none; background-color: transparent;">
-								<input onclick="A_divformradioclick(event)" type="radio" name="GuildA_div" value="No" class="" data-guild="A">
+								<input id="radioform_A_no" onclick="A_divformradioclick(event)" type="radio" name="GuildA_div" value="No" class="" data-guild="A">
 							</td>
 						</tr>
 						<tr data-guild="B"><td class="notguildmasterLocked">Guild B</td>
