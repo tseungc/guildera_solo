@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	window.startgame = function() {
 		//check step 0
 		if (window.step == 0) {
-			nameinput = document.getElementById('nameinput').value;
+			let nameinput = document.getElementById('nameinput').value;
 			if (nameinput == '') {
 				nameinput = 'Player';
 			}
