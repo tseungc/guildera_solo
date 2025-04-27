@@ -148,6 +148,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			change_A_all_missing_total_power(40);
 			// update dungeon can complete (+1A)
 			// update raid choice dropdown can complete
+			alert('Recruitment Successful.')
 			changestep(2);
 			
 		} else if (window.step == 15) {
@@ -162,6 +163,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			change_A_all_missing_total_power(90);
 			// update dungeon can complete (+1E, 1F)
 			// update raid choice dropdown can complete (+1E, 1F)
+			alert('Recruitment Successful.')
 			changestep(16);
 
 		} else {
@@ -173,6 +175,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		if (window.step == 2) {
 			document.getElementById('raid_GuildA_spareequipment_table').style.display = 'block';
 			update_A_treasury(240);
+			alert('Purchase Successful.')
 			changestep(3);
 		} else {
 			followguide();
