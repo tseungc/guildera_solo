@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			update_A_treasury(280);
 			change_A_all_missing_physical_power(40);
 			change_A_all_missing_total_power(40);
-			// update dungeon can complete (+1A)
+			document.getElementById('raid_GuildE_dungeon_1A_name').classList.add('cancomplete');
 			// update raid choice dropdown can complete
 			alert('Recruitment Successful.')
 			changestep(2);
@@ -161,7 +161,8 @@ document.addEventListener('DOMContentLoaded', function() {
 			update_A_treasury(170);
 			change_A_all_missing_physical_power(90);
 			change_A_all_missing_total_power(90);
-			// update dungeon can complete (+1E, 1F)
+			document.getElementById('raid_GuildE_dungeon_1E_name').classList.add('cancomplete');
+			document.getElementById('raid_GuildE_dungeon_1F_name').classList.add('cancomplete');
 			// update raid choice dropdown can complete (+1E, 1F)
 			alert('Recruitment Successful.')
 			changestep(16);
