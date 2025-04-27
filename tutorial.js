@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			document.getElementById('A_lineup_total_physical').innerHTML = '<span class="physical">40</span>';
 			document.getElementById('A_lineup_total_total').innerHTML = '<span class="total">40</span>';
 			// disable all recruit buttons (not 1 by 1, use function)
-			// update all treasury (not 1 by 1, use function)
+			update_A_treasury(280);
 			change_A_all_missing_physical_power(40);
 			change_A_all_missing_total_power(40);
 			// update dungeon can complete (+1A)
@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			document.getElementById('A_lineup_total_physical').innerHTML = '<span class="physical">90</span>';
 			document.getElementById('A_lineup_total_total').innerHTML = '<span class="total">90</span>';
 			// disable all recruit buttons (not 1 by 1, use function)
-			// update all treasury (not 1 by 1, use function)
+			update_A_treasury(170);
 			change_A_all_missing_physical_power(90);
 			change_A_all_missing_total_power(90);
 			// update dungeon can complete (+1E, 1F)
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	window.A_buysword1 = function() {
 		if (window.step == 2) {
 			document.getElementById('raid_GuildA_spareequipment_table').style.display = 'block';
-			// update treasury
+			update_A_treasury(240);
 			changestep(3);
 		} else {
 			followguide();
@@ -427,6 +427,21 @@ document.addEventListener('DOMContentLoaded', function() {
 		} else {
 			document.getElementById("raid_GuildE_dungeon_" + dungeon + "_total").innerHTML = '<span class="total">' + String(dungeonreq) + '</span>';
 		};
+	};
+
+	function update_A_treasury(treasury) {
+		document.getElementById("raid_GuildA_treasury").innerHTML = 'Treasury: <span>&#129689;</span>' + String(treasury);
+		document.getElementById("raid_GuildA_recruit_heading").innerHTML = 'Recruit Mercenaries (This guild has <span>&#129689;</span>' + String(treasury) + ')';
+		document.getElementById("raid_GuildA_equipmentshop_heading").innerHTML = 'Buy Equipment from Shop (This guild has <span>&#129689;</span>' + String(treasury) + ')';
+		document.getElementById("raid_GuildA_ability_heading").innerHTML = 'Special Consultants (This guild has <span>&#129689;</span>' + String(treasury) + ')';
+	};
+
+	function update_E_treasury(treasury) {
+		document.getElementById("raid_GuildE_treasury").innerHTML = 'Treasury: <span>&#129689;</span>' + String(treasury);
+		document.getElementById("raid_GuildE_recruit_heading").innerHTML = 'Recruit Mercenaries (This guild has <span>&#129689;</span>' + String(treasury) + ')';
+		document.getElementById("raid_GuildE_equipmentshop_heading").innerHTML = 'Buy Equipment from Shop (This guild has <span>&#129689;</span>' + String(treasury) + ')';
+		document.getElementById('raid_GuildE_equipmentotherguild_heading').innerHTML = 'Buy Equipment from your other guilds (This guild has <span>&#129689;</span>' + String(treasury) + ')';
+		document.getElementById("raid_GuildE_ability_heading").innerHTML = 'Special Consultants (This guild has <span>&#129689;</span>' + String(treasury) + ')';
 	};
 
 });
