@@ -320,7 +320,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		document.getElementById('A_archer1_button').classList.add('recruitedDisabled');
 //		document.getElementById('A_archer2_button').classList.add('recruitedDisabled');
 		document.getElementById('A_wizard1_button').classList.add('recruitedDisabled');
-//		document.getElementById('A_wizard2_button').classList.add('recruitedDisabled');
+		document.getElementById('A_wizard2_button').classList.add('recruitedDisabled');
 	};
 
 	
