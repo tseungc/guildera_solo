@@ -67,6 +67,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	//Initialize local variables
 	window.step = 0;
+	window.A_div = null;
+	window.E_div = null;
 	window.showhiderule = "hide";
 	window.guidtext = {
 		1: "hire a fighter level 1",
@@ -239,7 +241,11 @@ document.addEventListener('DOMContentLoaded', function() {
 			// check if no is chosen
 			updatephase('F');
 			changestep(19);
-		};
+		} else if (window.step == 39) {
+			// check if right combo is chosen
+			updatephase('F');
+			changestep(40);
+		}
 	};
 
 	window.divresultOK = function() {
@@ -467,4 +473,37 @@ document.addEventListener('DOMContentLoaded', function() {
 		document.getElementById("raid_GuildE_ability_heading").innerHTML = 'Special Consultants (This guild has <span>&#129689;</span>' + String(treasury) + ')';
 	};
 
+	function A_divformradioclick(e) {
+		window.A_div = e.currentTarget.value;
+		checkalldivselect();
+	}
+
+	function E_divformradioclick(e) {
+		window.E_div = e.currentTarget.value;
+		checkalldivselect();
+	}
+
+	function checkalldivselect() {
+		if (window.step == 6) {
+			if (window.A_div == null) {
+				document.getElementById('divFormButton').classList.add('divchoicesDisabled');
+			} else {
+				document.getElementById('divFormButton').classList.remove('divchoicesDisabled');
+			}
+		} else if (window.step == 18) {
+			if (window.A_div == null) {
+				document.getElementById('divFormButton').classList.add('divchoicesDisabled');
+			} else {
+				document.getElementById('divFormButton').classList.remove('divchoicesDisabled');
+			}
+		} else if (window.step == 39) {
+			document.getElementById('divFormButton').classList.remove('divchoicesDisabled');
+			if (window.A_div == null) {
+				document.getElementById('divFormButton').classList.add('divchoicesDisabled');
+			}
+			if (window.E_div == null) {
+				document.getElementById('divFormButton').classList.add('divchoicesDisabled');
+			}
+		};
+	};
 });
