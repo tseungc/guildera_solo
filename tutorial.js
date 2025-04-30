@@ -206,7 +206,17 @@ document.addEventListener('DOMContentLoaded', function() {
 				document.getElementById('A_lineup_slot1_total').innerHTML = '<span class="total">50</span>';
 				document.getElementById('A_lineup_total_physical').innerHTML = '<span class="physical">50</span>';
 				document.getElementById('A_lineup_total_total').innerHTML = '<span class="total">50</span>';
-				// NEED show unequip button in line up
+
+				// show unequip button in line up
+				const equipmentcell = document.getElementById("A_lineup_slot1_equipment");
+				const unequipbutton = document.createElement('button');
+				unequipbutton.id = 'unequip_slot_1';
+				unequipbutton.textContent = 'Unequip';
+				unequipbutton.style.marginLeft = '10px';
+				unequipbutton.style.marginRight = '2px';
+				unequipbutton.addEventListener('click', window.A_unequipsword1);
+				equipmentcell.appendChild(unequipbutton);
+
 				change_A_all_missing_physical_power(50);
 				change_A_all_missing_total_power(50);
 				document.getElementById('raid_GuildA_dungeon_1D_name').classList.add('cancomplete');
