@@ -178,6 +178,8 @@ document.addEventListener('DOMContentLoaded', function() {
 		};
 	};
 
+	// 2 -> R1 Buy a Lv 1 sword
+
 	window.A_buysword1 = function() {
 		if (window.step == 2) {
 			document.getElementById('raid_GuildA_spareequipment_table').style.display = 'block';
@@ -192,21 +194,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	window.A_equipsword1 = function() {
 		if (window.step == 3) {
-			// NEED to check if chosen slot 1 fighter 1 in dropdown, else followguide()
-			document.getElementById('raid_GuildA_spareequipment_table').style.display = 'none';
-			document.getElementById('raid_GuildA_spareequipment_heading').style.display = 'none';
-			document.getElementById('A_lineup_slot1_equipment').textContent = 'Sword Lvl 1';
-			document.getElementById('A_lineup_slot1_physical').innerHTML = '<span class="physical">50</span>';
-			document.getElementById('A_lineup_slot1_total').innerHTML = '<span class="total">50</span>';
-			document.getElementById('A_lineup_total_physical').innerHTML = '<span class="physical">50</span>';
-			document.getElementById('A_lineup_total_total').innerHTML = '<span class="total">50</span>';
-			// NEED show unequip button in line up
-			change_A_all_missing_physical_power(50);
-			change_A_all_missing_total_power(50);
-			document.getElementById('raid_GuildA_dungeon_1D_name').classList.add('cancomplete');
-			document.getElementById('raidchoice_A_1D').classList.add('cancomplete');
-			document.getElementById('raidchoice_A_1D').innerHTML = '1D &#10004;';
-			changestep(4);
+			// Check if chosen slot 1 fighter 1 in dropdown, else followguide()
+			const dropdown = document.getElementById("A_spareequipment_sword1_options");
+			if (dropdown.value != "0") {
+				followguide();
+			} else {
+				document.getElementById('raid_GuildA_spareequipment_table').style.display = 'none';
+				document.getElementById('raid_GuildA_spareequipment_heading').style.display = 'none';
+				document.getElementById('A_lineup_slot1_equipment').textContent = 'Sword Lvl 1';
+				document.getElementById('A_lineup_slot1_physical').innerHTML = '<span class="physical">50</span>';
+				document.getElementById('A_lineup_slot1_total').innerHTML = '<span class="total">50</span>';
+				document.getElementById('A_lineup_total_physical').innerHTML = '<span class="physical">50</span>';
+				document.getElementById('A_lineup_total_total').innerHTML = '<span class="total">50</span>';
+				// NEED show unequip button in line up
+				change_A_all_missing_physical_power(50);
+				change_A_all_missing_total_power(50);
+				document.getElementById('raid_GuildA_dungeon_1D_name').classList.add('cancomplete');
+				document.getElementById('raidchoice_A_1D').classList.add('cancomplete');
+				document.getElementById('raidchoice_A_1D').innerHTML = '1D &#10004;';
+				changestep(4);
+			};
 		};
 	};
 
@@ -233,9 +240,10 @@ document.addEventListener('DOMContentLoaded', function() {
 			update_E_treasury(240);
 			change_E_all_missing_magic_power(60);
 			change_E_all_missing_total_power(60);
-			// update all cancompletes (dungeo table and dropdown menu)
+			// update all cancompletes (dungeon table and dropdown menu)
 			alert('Recruitment Successful.')
-			changestep(2);		}
+			changestep(2);
+		}
 	}
 
 	window.raidsubmit = function() {
