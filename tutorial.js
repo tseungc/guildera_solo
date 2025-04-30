@@ -258,15 +258,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	window.raidsubmit = function() {
 		if (window.step == 4) {
-			// NEED check if 1D is chosen
-			updatephase('D');
-			changestep(5);
+			const dropdown = document.getElementById("raidchoice_GuildA_dropdown")
+			if (dropdown.value != "1D") {
+				followguide();
+			} else {
+				updatephase('D');
+				changestep(5);
+			}
 		} else if (window.step == 16) {
-			// NEED check if 1F is chosen
-			updatephase('D');
-			changestep(17);
+			const dropdown = document.getElementById("raidchoice_GuildA_dropdown")
+			if (dropdown.value != "1F") {
+				followguide();
+			} else {
+				updatephase('D');
+				changestep(17);
+			}
 		} else {
-			followguid();
+			followguide();
 		};
 	};
 
